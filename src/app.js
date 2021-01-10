@@ -17,11 +17,28 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
   bot.sendMessage(chatId, resp);
 });
 
-const bobaOptions = ['Chi Cha San Chen', 'Bober', 'KOI', 'R&B', 'LiHo'];
+const bobaOptions = ['Bober', 'KOI', 'R&B', 'LiHo'];
 
 bot.onText(/\/(boba)|(bbt)/, (msg) => {
   const chatId = msg.chat.id;
   const response = `How about having some ${bobaOptions[getRandomInt(bobaOptions.length)]} today?`;
+
+  bot.sendMessage(chatId, response);
+});
+
+const lunchOptions = [
+  'Bowl & Grill',
+  'I Love Taimei',
+  'Encik Tan',
+  'Saizeriya',
+  'Wok Hey',
+  'saving some money! Go Limbang.',
+  'some cup noodles...',
+];
+
+bot.onText(/\/lunch/, (msg) => {
+  const chatId = msg.chat.id;
+  const response = `How about ${lunchOptions[getRandomInt(lunchOptions.length)]}?`;
 
   bot.sendMessage(chatId, response);
 });
