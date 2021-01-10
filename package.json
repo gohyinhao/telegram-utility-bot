@@ -2,6 +2,9 @@
   "name": "telegram-util-bot",
   "version": "1.0.0",
   "description": "telegram utility bot",
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
