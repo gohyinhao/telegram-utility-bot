@@ -5,7 +5,6 @@ const { parseCallbackData, formatTime } = require('../utils');
 
 bot.onText(/\/.*car.*/, async (msg, match) => {
   const chatId = msg.chat.id;
-  console.log(match);
 
   if (match.input.includes('where')) {
     try {
