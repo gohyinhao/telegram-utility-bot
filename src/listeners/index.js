@@ -20,6 +20,7 @@ bot.onText(/\/help/, (msg) => {
       '1. Car-related help. /car\n' +
       '2. Fisi-related help. /fisi\n' +
       '3. What boba should we get? /boba\n' +
-      "4. What's for lunch? /lunch\n",
+      "4. What's for lunch? /lunch\n" +
+      '5. Who to throw the rubbish?! /rubbish\n',
   );
 });

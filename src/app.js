@@ -19,3 +19,4 @@ require('./listeners/boba');
 require('./listeners/car');
 require('./listeners/fisi');
 require('./listeners/lunch');
+require('./listeners/rubbish');
