@@ -12,11 +12,9 @@ const rubbishThrowerOptions = [
   'Fisi-chan other self',
 ];
 
-bot.onText(/\/rubbish/, (msg) => {
-  const chatId = msg.chat.id;
+bot.command('rubbish', (ctx) => {
   const response = `The person who should throw rubbish is ${
     rubbishThrowerOptions[getRandomInt(rubbishThrowerOptions.length)]
   }`;
-
-  bot.sendMessage(chatId, response);
+  ctx.reply(response);
 });

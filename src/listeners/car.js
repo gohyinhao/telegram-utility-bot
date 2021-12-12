@@ -3,24 +3,23 @@ const CarInfo = require('../models/carInfo');
 const { DataType } = require('../constants');
 const { parseCallbackData, formatTime } = require('../utils');
 
-bot.onText(/\/.*car.*/, async (msg, match) => {
-  const chatId = msg.chat.id;
+bot.hears(/\/.*car.*/, async (ctx) => {
+  const chatId = ctx.message.chat.id;
 
-  if (match.input.includes('where')) {
+  if (ctx.match.input.includes('where')) {
     try {
       const carInfo = await CarInfo.findOne({ chatId });
       if (!carInfo) {
         throw new Error();
       }
-      bot.sendMessage(
-        chatId,
+      ctx.reply(
         `Car was last parked at Floor ${carInfo.location} on ${formatTime(carInfo.updatedAt)}.`,
       );
     } catch (err) {
-      bot.sendMessage(chatId, 'Unable to find parking info.');
+      ctx.reply('Unable to find parking info.');
     }
-  } else if (match.input.includes('park')) {
-    bot.sendMessage(chatId, 'Where did you park the car?', {
+  } else if (ctx.match.input.includes('park')) {
+    ctx.reply('Where did you park the car?', {
       reply_markup: {
         inline_keyboard: [
           [
@@ -47,8 +46,7 @@ bot.onText(/\/.*car.*/, async (msg, match) => {
       },
     });
   } else {
-    bot.sendMessage(
-      chatId,
+    ctx.reply(
       'What would you like to know?\n' +
         '1. Where is the car parked at? /wherecar\n' +
         '2. I want to record where I have just parked the car. /parkcar',
@@ -56,7 +54,8 @@ bot.onText(/\/.*car.*/, async (msg, match) => {
   }
 });
 
-bot.on('callback_query', async ({ id, message, data }) => {
+bot.on('callback_query', async (ctx) => {
+  const { id, message, data } = ctx.update.callback_query;
   const chatId = message.chat.id;
   const [dataType, parkedLocation] = parseCallbackData(data);
   if (dataType !== DataType.PARKING_INFO) {
@@ -68,13 +67,13 @@ bot.on('callback_query', async ({ id, message, data }) => {
     if (!carInfo) {
       const newCarInfo = new CarInfo({ chatId, location: parkedLocation });
       await newCarInfo.save();
-      bot.answerCallbackQuery(id, { text: `Car location of ${parkedLocation} is saved.` });
+      ctx.answerCbQuery(id, { text: `Car location of ${parkedLocation} is saved.` });
     } else {
       carInfo.location = parkedLocation;
       await carInfo.save();
-      bot.answerCallbackQuery(id, { text: `Car location of ${parkedLocation} is saved.` });
+      ctx.answerCbQuery(id, { text: `Car location of ${parkedLocation} is saved.` });
     }
   } catch (err) {
-    bot.answerCallbackQuery(id, { text: 'Failed to save new parked location.' });
+    ctx.answerCbQuery(id, { text: 'Failed to save new parked location.' });
   }
 });

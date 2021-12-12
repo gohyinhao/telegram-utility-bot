@@ -10,8 +10,6 @@ const fisiMessages = [
   'Where is fisi I wonder?',
 ];
 
-bot.onText(/\/fisi/, (msg) => {
-  const chatId = msg.chat.id;
-
-  bot.sendMessage(chatId, fisiMessages[getRandomInt(fisiMessages.length)]);
+bot.command('fisi', (ctx) => {
+  ctx.reply(fisiMessages[getRandomInt(fisiMessages.length)]);
 });

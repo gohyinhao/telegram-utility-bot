@@ -14,14 +14,14 @@
   "author": "Goh Yin Hao",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.17.0",
-    "nodemon": "^2.0.7",
-    "prettier": "^2.2.1"
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.12",
-    "node-telegram-bot-api": "^0.51.0"
+    "mongoose": "^5.13.13",
+    "telegraf": "^4.5.2"
   }
 }

@@ -11,9 +11,7 @@ const lunchOptions = [
   'some cup noodles...',
 ];
 
-bot.onText(/\/lunch/, (msg) => {
-  const chatId = msg.chat.id;
+bot.command('lunch', (ctx) => {
   const response = `How about ${lunchOptions[getRandomInt(lunchOptions.length)]}?`;
-
-  bot.sendMessage(chatId, response);
+  ctx.reply(response);
 });

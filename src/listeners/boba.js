@@ -3,9 +3,7 @@ const { getRandomInt } = require('../utils');
 
 const bobaOptions = ['Bober', 'KOI', 'R&B', 'LiHo'];
 
-bot.onText(/\/(boba)|(bbt)/, (msg) => {
-  const chatId = msg.chat.id;
+bot.hears(/\/(boba)|(bbt)/, (ctx) => {
   const response = `How about having some ${bobaOptions[getRandomInt(bobaOptions.length)]} today?`;
-
-  bot.sendMessage(chatId, response);
+  ctx.reply(response);
 });
