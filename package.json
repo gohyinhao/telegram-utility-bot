@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "telegram utility bot",
   "engines": {
-    "node": "12.20.0"
+    "node": "16.13.1"
   },
   "main": "src/app.js",
   "scripts": {
