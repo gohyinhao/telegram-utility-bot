@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const carInfoSchema = new mongoose.Schema(
   {
     chatId: {
-      type: String,
+      type: Number,
       required: true,
       unique: true,
     },

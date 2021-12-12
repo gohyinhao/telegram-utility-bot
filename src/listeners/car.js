@@ -1,7 +1,7 @@
 import bot from '../bot.js';
 import CarInfo from '../models/carInfo.js';
 import { DataType } from '../constants.js';
-import { parseCallbackData, formatTime } from '../utils/index.js';
+import { parseCallbackData, formatTime, encodeCallbackData } from '../utils/index.js';
 
 export default () => {
   bot.hears(/\/.*car.*/, async (ctx) => {
@@ -24,24 +24,24 @@ export default () => {
         reply_markup: {
           inline_keyboard: [
             [
-              { text: '1A', callback_data: `${DataType.PARKING_INFO}_1A` },
-              { text: '1B', callback_data: `${DataType.PARKING_INFO}_1B` },
+              { text: '1A', callback_data: encodeCallbackData(DataType.PARKING_INFO, '1A') },
+              { text: '1B', callback_data: encodeCallbackData(DataType.PARKING_INFO, '1B') },
             ],
             [
-              { text: '2A', callback_data: `${DataType.PARKING_INFO}_2A` },
-              { text: '2B', callback_data: `${DataType.PARKING_INFO}_2B` },
+              { text: '2A', callback_data: encodeCallbackData(DataType.PARKING_INFO, '2A') },
+              { text: '2B', callback_data: encodeCallbackData(DataType.PARKING_INFO, '2B') },
             ],
             [
-              { text: '3A', callback_data: `${DataType.PARKING_INFO}_3A` },
-              { text: '3B', callback_data: `${DataType.PARKING_INFO}_3B` },
+              { text: '3A', callback_data: encodeCallbackData(DataType.PARKING_INFO, '3A') },
+              { text: '3B', callback_data: encodeCallbackData(DataType.PARKING_INFO, '3B') },
             ],
             [
-              { text: '4A', callback_data: `${DataType.PARKING_INFO}_4A` },
-              { text: '4B', callback_data: `${DataType.PARKING_INFO}_4B` },
+              { text: '4A', callback_data: encodeCallbackData(DataType.PARKING_INFO, '4A') },
+              { text: '4B', callback_data: encodeCallbackData(DataType.PARKING_INFO, '4B') },
             ],
             [
-              { text: '5A', callback_data: `${DataType.PARKING_INFO}_5A` },
-              { text: '5B', callback_data: `${DataType.PARKING_INFO}_5B` },
+              { text: '5A', callback_data: encodeCallbackData(DataType.PARKING_INFO, '5A') },
+              { text: '5B', callback_data: encodeCallbackData(DataType.PARKING_INFO, '5B') },
             ],
           ],
         },

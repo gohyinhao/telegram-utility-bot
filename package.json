@@ -15,6 +15,7 @@
   "author": "Goh Yin Hao",
   "license": "ISC",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
     "eslint": "^8.4.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1"
