@@ -1,22 +1,15 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+
+dotenv.config();
 
 // ============================
 // DATABASE
 // ============================
-mongoose.connect(process.env.MONGODB_URL, {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGODB_URL);
 
 // ============================
 // EVENT LISTENERS
 // ============================
-require('./listeners');
-require('./listeners/boba');
-require('./listeners/car');
-require('./listeners/fisi');
-require('./listeners/lunch');
-require('./listeners/rubbish');
+import runBotCommands from './listeners/index.js';
+runBotCommands();

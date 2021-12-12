@@ -1,5 +1,5 @@
-const bot = require('../bot');
-const { getRandomInt } = require('../utils');
+import bot from '../bot.js';
+import { getRandomInt } from '../utils/index.js';
 
 const fisiMessages = [
   'There is no real fisi. They are both fisi.',
@@ -10,6 +10,8 @@ const fisiMessages = [
   'Where is fisi I wonder?',
 ];
 
-bot.command('fisi', (ctx) => {
-  ctx.reply(fisiMessages[getRandomInt(fisiMessages.length)]);
-});
+export default () => {
+  bot.command('fisi', (ctx) => {
+    ctx.reply(fisiMessages[getRandomInt(fisiMessages.length)]);
+  });
+};

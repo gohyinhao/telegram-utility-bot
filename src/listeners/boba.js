@@ -1,9 +1,13 @@
-const bot = require('../bot');
-const { getRandomInt } = require('../utils');
+import bot from '../bot.js';
+import { getRandomInt } from '../utils/index.js';
 
 const bobaOptions = ['Bober', 'KOI', 'R&B', 'LiHo'];
 
-bot.hears(/\/(boba)|(bbt)/, (ctx) => {
-  const response = `How about having some ${bobaOptions[getRandomInt(bobaOptions.length)]} today?`;
-  ctx.reply(response);
-});
+export default () => {
+  bot.hears(/\/(boba)|(bbt)/, (ctx) => {
+    const response = `How about having some ${
+      bobaOptions[getRandomInt(bobaOptions.length)]
+    } today?`;
+    ctx.reply(response);
+  });
+};

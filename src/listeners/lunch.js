@@ -1,5 +1,5 @@
-const bot = require('../bot');
-const { getRandomInt } = require('../utils');
+import bot from '../bot.js';
+import { getRandomInt } from '../utils/index.js';
 
 const lunchOptions = [
   'Bowl & Grill',
@@ -11,7 +11,9 @@ const lunchOptions = [
   'some cup noodles...',
 ];
 
-bot.command('lunch', (ctx) => {
-  const response = `How about ${lunchOptions[getRandomInt(lunchOptions.length)]}?`;
-  ctx.reply(response);
-});
+export default () => {
+  bot.command('lunch', (ctx) => {
+    const response = `How about ${lunchOptions[getRandomInt(lunchOptions.length)]}?`;
+    ctx.reply(response);
+  });
+};

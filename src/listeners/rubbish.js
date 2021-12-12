@@ -1,5 +1,5 @@
-const bot = require('../bot');
-const { getRandomInt } = require('../utils');
+import bot from '../bot.js';
+import { getRandomInt } from '../utils/index.js';
 
 const rubbishThrowerOptions = [
   'JJB',
@@ -12,9 +12,11 @@ const rubbishThrowerOptions = [
   'Fisi-chan other self',
 ];
 
-bot.command('rubbish', (ctx) => {
-  const response = `The person who should throw rubbish is ${
-    rubbishThrowerOptions[getRandomInt(rubbishThrowerOptions.length)]
-  }`;
-  ctx.reply(response);
-});
+export default () => {
+  bot.command('rubbish', (ctx) => {
+    const response = `The person who should throw rubbish is ${
+      rubbishThrowerOptions[getRandomInt(rubbishThrowerOptions.length)]
+    }`;
+    ctx.reply(response);
+  });
+};
