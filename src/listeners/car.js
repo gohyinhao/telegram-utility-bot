@@ -1,7 +1,29 @@
 import bot from '../bot.js';
 import CarInfo from '../models/carInfo.js';
 import { DataType } from '../constants.js';
-import { parseCallbackData, formatTime, encodeCallbackData } from '../utils/index.js';
+import { formatTime, encodeCallbackData } from '../utils/index.js';
+
+export const handleParkingInfoCallbackQuery = async (
+  ctx,
+  callbackQueryId,
+  chatId,
+  parkedLocation,
+) => {
+  try {
+    const carInfo = await CarInfo.findOne({ chatId });
+    if (!carInfo) {
+      const newCarInfo = new CarInfo({ chatId, location: parkedLocation });
+      await newCarInfo.save();
+      ctx.answerCbQuery(callbackQueryId, { text: `Car location of ${parkedLocation} is saved.` });
+    } else {
+      carInfo.location = parkedLocation;
+      await carInfo.save();
+      ctx.answerCbQuery(callbackQueryId, { text: `Car location of ${parkedLocation} is saved.` });
+    }
+  } catch (err) {
+    ctx.answerCbQuery(callbackQueryId, { text: 'Failed to save new parked location.' });
+  }
+};
 
 export default () => {
   bot.hears(/\/.*car.*/, async (ctx) => {
@@ -52,30 +74,6 @@ export default () => {
           '1. Where is the car parked at? /wherecar\n' +
           '2. I want to record where I have just parked the car. /parkcar',
       );
-    }
-  });
-
-  bot.on('callback_query', async (ctx) => {
-    const { id, message, data } = ctx.update.callback_query;
-    const chatId = message.chat.id;
-    const [dataType, parkedLocation] = parseCallbackData(data);
-    if (dataType !== DataType.PARKING_INFO) {
-      return;
-    }
-
-    try {
-      const carInfo = await CarInfo.findOne({ chatId });
-      if (!carInfo) {
-        const newCarInfo = new CarInfo({ chatId, location: parkedLocation });
-        await newCarInfo.save();
-        ctx.answerCbQuery(id, { text: `Car location of ${parkedLocation} is saved.` });
-      } else {
-        carInfo.location = parkedLocation;
-        await carInfo.save();
-        ctx.answerCbQuery(id, { text: `Car location of ${parkedLocation} is saved.` });
-      }
-    } catch (err) {
-      ctx.answerCbQuery(id, { text: 'Failed to save new parked location.' });
     }
   });
 };

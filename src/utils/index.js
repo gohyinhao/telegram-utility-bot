@@ -6,8 +6,8 @@ export const getRandomInt = (max) => {
 
 const DELIMITER = String.fromCharCode(31);
 
-export const encodeCallbackData = (type, data) => {
-  return `${type}${DELIMITER}${data}`;
+export const encodeCallbackData = (type, ...data) => {
+  return type + DELIMITER + data.join(DELIMITER);
 };
 
 export const parseCallbackData = (dataStr) => {
