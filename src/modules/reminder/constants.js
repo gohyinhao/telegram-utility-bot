@@ -5,7 +5,7 @@ const ReminderFrequency = {
   MINUTE: 'min',
   HOUR: 'hour',
   DAY: 'day',
-  MONTH: 'mth',
+  MONTH: 'month',
   QUARTER: 'quarter',
   BIANNUAL: 'biannual',
   YEAR: 'year',
