@@ -3,17 +3,16 @@ const { ReminderFrequency, ReminderType } = require('./constants');
 
 const reminderSchema = new mongoose.Schema(
   {
-    id: {
-      type: mongoose.Types.ObjectId,
-      default: new mongoose.Types.ObjectId(),
-      // will also serve as scheduler job id
-    },
     chatId: {
       type: Number,
       required: true,
     },
     userId: {
       type: Number,
+      required: true,
+    },
+    username: {
+      type: String,
       required: true,
     },
     reminderTimestamp: {
