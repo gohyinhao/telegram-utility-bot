@@ -15,7 +15,7 @@ const parseCallbackData = (dataStr) => {
 };
 
 const formatTime = (timestamp) => {
-  return moment(timestamp).format('ddd, D MMM, HH:mm');
+  return moment(timestamp).format('ddd, D MMM YY, HH:mm');
 };
 
 module.exports = { getRandomInt, encodeCallbackData, parseCallbackData, formatTime };
