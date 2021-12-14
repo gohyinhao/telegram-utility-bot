@@ -21,5 +21,8 @@ bot.on('callback_query', async (ctx) => {
       break;
     case DataType.REMINDER_FREQ:
       await handleReminderFreqCallbackQuery(ctx, id, ...args);
+      break;
   }
+
+  ctx.deleteMessage(message.id);
 });

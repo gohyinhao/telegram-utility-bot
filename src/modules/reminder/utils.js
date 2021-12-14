@@ -60,8 +60,11 @@ const scheduleRecurringReminderTask = (bot, reminder) => {
         `Successfully updated recurring reminder id ${_id.toString()} after job completed`,
       );
     } catch (err) {
-      console.log(err.message);
-      console.error(`Failed to update recurring reminder id ${_id.toString()} after job completed`);
+      console.error(
+        `Failed to update recurring reminder id ${_id.toString()} after job completed. ${
+          err.message
+        }`,
+      );
     }
   });
 };
