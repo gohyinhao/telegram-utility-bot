@@ -1,6 +1,6 @@
 const bot = require('../../bot');
 const moment = require('moment');
-const Reminder = require('./reminder');
+const Reminder = require('./models/reminder');
 const schedule = require('../../scheduler');
 const { formatTime } = require('../../utils/index');
 const { ReminderType } = require('./constants');

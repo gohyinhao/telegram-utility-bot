@@ -1,5 +1,5 @@
 const bot = require('../../bot');
-const CarInfo = require('./carInfo');
+const CarInfo = require('./models/carInfo');
 const { DataType } = require('../../constants');
 const { formatTime, encodeCallbackData } = require('../../utils/index');
 

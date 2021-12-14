@@ -1,4 +1,4 @@
-const Reminder = require('./reminder');
+const Reminder = require('./models/reminder');
 
 const createNewReminder = async (reminderFields) => {
   const newReminderInfo = new Reminder(reminderFields);

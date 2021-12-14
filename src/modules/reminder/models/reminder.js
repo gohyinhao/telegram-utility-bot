@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { ReminderFrequency, ReminderType } = require('./constants');
+const { ReminderFrequency, ReminderType } = require('../constants');
 
 const reminderSchema = new mongoose.Schema(
   {

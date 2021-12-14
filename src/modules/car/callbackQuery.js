@@ -1,4 +1,4 @@
-const CarInfo = require('./carInfo');
+const CarInfo = require('./models/carInfo');
 
 const handleParkingInfoCallbackQuery = async (ctx, callbackQueryId, chatId, parkedLocation) => {
   try {
