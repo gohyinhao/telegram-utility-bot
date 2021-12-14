@@ -1,8 +1,9 @@
 const bot = require('../../bot');
 const moment = require('moment');
-const { formatTime } = require('../../utils/index');
+const { encodeCallbackData } = require('../../utils/index');
 const { ReminderType } = require('./constants');
-const { createNewReminder, scheduleNonRecurringReminderTask } = require('./utils');
+const { createNewReminder } = require('./utils');
+const { DataType } = require('../../constants');
 
 bot.command('reminder', (ctx) => {
   ctx.reply('What would you like to do?\n' + '1. Create new reminder /newreminder');
@@ -15,18 +16,41 @@ bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
   const reminderText = ctx.match[2];
 
   try {
+    // need to create reminder first and retrieve from db later due to max byte limit of 64 in callback data
     const reminder = await createNewReminder({
       chatId,
       userId,
       username,
       reminderTimestamp,
       reminderText,
-      type: ReminderType.NON_RECURRING,
+      type: ReminderType.NON_RECURRING, // set as NON_RECURRING first, will have to edit later if it is recurring
     });
-    scheduleNonRecurringReminderTask(bot, reminder);
-    ctx.reply(`Reminder scheduled on ${formatTime(reminderTimestamp)}`);
+    ctx.reply('Is this a recurring reminder?', {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: 'Yes',
+              callback_data: encodeCallbackData(
+                DataType.REMINDER_TYPE,
+                reminder._id.toString(),
+                ReminderType.RECURRING,
+              ),
+            },
+            {
+              text: 'No',
+              callback_data: encodeCallbackData(
+                DataType.REMINDER_TYPE,
+                reminder._id.toString(),
+                ReminderType.NON_RECURRING,
+              ),
+            },
+          ],
+        ],
+      },
+    });
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     ctx.reply('Failed to create reminder. Database error.');
   }
 });

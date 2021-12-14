@@ -2,6 +2,7 @@ const bot = require('../../bot');
 const { DataType } = require('../../constants');
 const { parseCallbackData } = require('../../utils/index');
 const { handleParkingInfoCallbackQuery } = require('../car');
+const { handleReminderTypeCallbackQuery } = require('../reminder/callbackQuery');
 
 bot.on('callback_query', async (ctx) => {
   const { id, message, data } = ctx.update.callback_query;
@@ -11,6 +12,9 @@ bot.on('callback_query', async (ctx) => {
   switch (dataType) {
     case DataType.PARKING_INFO:
       await handleParkingInfoCallbackQuery(ctx, id, chatId, ...args);
+      break;
+    case DataType.REMINDER_TYPE:
+      await handleReminderTypeCallbackQuery(ctx, id, ...args);
       break;
   }
 });
