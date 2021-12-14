@@ -1,19 +1,21 @@
-import moment from 'moment';
+const moment = require('moment');
 
-export const getRandomInt = (max) => {
+const getRandomInt = (max) => {
   return Math.floor(Math.random() * max);
 };
 
 const DELIMITER = String.fromCharCode(31);
 
-export const encodeCallbackData = (type, ...data) => {
+const encodeCallbackData = (type, ...data) => {
   return type + DELIMITER + data.join(DELIMITER);
 };
 
-export const parseCallbackData = (dataStr) => {
+const parseCallbackData = (dataStr) => {
   return dataStr.split(DELIMITER);
 };
 
-export const formatTime = (timestamp) => {
+const formatTime = (timestamp) => {
   return moment(timestamp).format('ddd, D MMM, HH:mm');
 };
+
+module.exports = { getRandomInt, encodeCallbackData, parseCallbackData, formatTime };

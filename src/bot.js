@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
-import { Telegraf } from 'telegraf';
-import { schedule, toadScheduler } from './scheduler.js';
-
-dotenv.config();
+require('dotenv').config();
+const { Telegraf } = require('telegraf');
+const schedule = require('./scheduler');
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const PORT = process.env.PORT || 3000;
@@ -18,13 +16,11 @@ bot.launch();
 // Enable graceful stop
 process.once('SIGINT', async () => {
   await schedule.gracefulShutdown();
-  toadScheduler.stop();
   bot.stop('SIGINT');
 });
 process.once('SIGTERM', async () => {
   await schedule.gracefulShutdown();
-  toadScheduler.stop();
   bot.stop('SIGTERM');
 });
 
-export default bot;
+module.exports = bot;

@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-
-dotenv.config();
+require('dotenv').config();
+const mongoose = require('mongoose');
 
 // ============================
 // DATABASE
@@ -9,7 +7,6 @@ dotenv.config();
 mongoose.connect(process.env.MONGODB_URL);
 
 // ============================
-// EVENT LISTENERS
+// MODULES
 // ============================
-import runBotCommands from './listeners/index.js';
-runBotCommands();
+require('./modules/index');

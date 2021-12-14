@@ -1,6 +1,3 @@
-import { ToadScheduler } from 'toad-scheduler';
-import schedule from 'node-schedule';
+const schedule = require('node-schedule');
 
-const toadScheduler = new ToadScheduler();
-
-export { schedule, toadScheduler };
+module.exports = schedule;
