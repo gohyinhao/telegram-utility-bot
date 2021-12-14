@@ -1,12 +1,17 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// ============================
-// DATABASE
-// ============================
+/**
+ * DB CONFIG
+ */
 mongoose.connect(process.env.MONGODB_URL);
 
-// ============================
-// MODULES
-// ============================
+/**
+ * MODULES
+ */
 require('./modules/index');
+
+/**
+ * ON LAUNCH LOGIC
+ */
+require('./modules/reminder/onLaunch');

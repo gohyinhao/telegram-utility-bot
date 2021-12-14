@@ -1,10 +1,8 @@
 const bot = require('../../bot');
 const moment = require('moment');
-const Reminder = require('./models/reminder');
-const schedule = require('../../scheduler');
 const { formatTime } = require('../../utils/index');
 const { ReminderType } = require('./constants');
-const { createNewReminder, getReminderTemplate } = require('./utils');
+const { createNewReminder, scheduleNonRecurringReminderTask } = require('./utils');
 
 bot.command('reminder', (ctx) => {
   ctx.reply('What would you like to do?\n' + '1. Create new reminder /newreminder');
@@ -25,19 +23,7 @@ bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
       reminderText,
       type: ReminderType.NON_RECURRING,
     });
-    schedule.scheduleJob(new Date(reminderTimestamp), async () => {
-      ctx.reply(getReminderTemplate(reminderText, username));
-      try {
-        await Reminder.findByIdAndDelete(reminder._id);
-        console.log(
-          `Successfully deleted reminder id ${reminder._id.toString()} after job completed`,
-        );
-      } catch (err) {
-        console.error(
-          `Failed to delete reminder id ${reminder._id.toString()} after job completed`,
-        );
-      }
-    });
+    scheduleNonRecurringReminderTask(bot, reminder);
     ctx.reply(`Reminder scheduled on ${formatTime(reminderTimestamp)}`);
   } catch (err) {
     console.log(err.message);
