@@ -1,24 +1,34 @@
 const Reminder = require('./models/reminder');
 const schedule = require('../../scheduler');
 const { ReminderFrequency } = require('./constants');
+const moment = require('moment');
 
-const convertReminderFreqToMs = (freq) => {
+const getNewTimestampAfterInterval = (currentTimestamp, freq) => {
+  const time = moment(currentTimestamp);
   switch (freq) {
     case ReminderFrequency.MINUTE:
-      return 1000 * 60;
+      time.add(1, 'minute');
+      break;
     case ReminderFrequency.HOUR:
-      return 1000 * 60 * 60;
+      time.add(1, 'hour');
+      break;
     case ReminderFrequency.DAY:
-      return 1000 * 60 * 60 * 24;
+      time.add(1, 'day');
+      break;
     case ReminderFrequency.MONTH:
-      return 1000 * 60 * 60 * 24 * 30;
+      time.add(1, 'month');
+      break;
     case ReminderFrequency.QUARTER:
-      return 1000 * 60 * 60 * 24 * 30 * 3;
+      time.add(3, 'months');
+      break;
     case ReminderFrequency.BIANNUAL:
-      return 1000 * 60 * 60 * 24 * 30 * 3 * 2;
+      time.add(6, 'months');
+      break;
     case ReminderFrequency.YEAR:
-      return 1000 * 60 * 60 * 24 * 30 * 3 * 2 * 2;
+      time.add(1, 'year');
+      break;
   }
+  return time.valueOf();
 };
 
 const createNewReminder = async (reminderFields) => {
@@ -51,7 +61,7 @@ const scheduleRecurringReminderTask = (bot, reminder) => {
       const newReminder = await Reminder.findByIdAndUpdate(
         _id,
         {
-          reminderTimestamp: reminderTimestamp + convertReminderFreqToMs(frequency),
+          reminderTimestamp: getNewTimestampAfterInterval(reminderTimestamp, frequency),
         },
         { returnDocument: 'after' },
       );
@@ -70,7 +80,7 @@ const scheduleRecurringReminderTask = (bot, reminder) => {
 };
 
 module.exports = {
-  convertReminderFreqToMs,
+  getNewTimestampAfterInterval,
   createNewReminder,
   getReminderTemplate,
   scheduleNonRecurringReminderTask,
