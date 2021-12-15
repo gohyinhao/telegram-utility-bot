@@ -4,6 +4,7 @@ import { Reminder, ReminderFrequency } from './types';
 import moment from 'moment';
 import { Telegraf } from 'telegraf';
 import { OmitDbFields } from 'types';
+import { formatTime } from '../../utils';
 
 export const getNewTimestampAfterInterval = (
   currentTimestamp: number,
@@ -89,4 +90,13 @@ export const scheduleRecurringReminderTask = (bot: Telegraf, reminder: Reminder)
       bot.telegram.sendMessage(chatId, 'Failed to schedule next recurring reminder.');
     }
   });
+};
+
+export const formatReminderForDisplay = (reminder: Reminder): string => {
+  const { reminderTimestamp, reminderText, type, frequency } = reminder;
+  let result = `${formatTime(reminderTimestamp)} | ${reminderText} | ${type}`;
+  if (frequency) {
+    result += ` every ${frequency}`;
+  }
+  return result;
 };

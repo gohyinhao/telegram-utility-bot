@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { DataType } from 'types';
+import { DataType } from '../types';
 
 export const getRandomInt = (max: number): number => {
   return Math.floor(Math.random() * max);

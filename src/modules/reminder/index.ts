@@ -1,12 +1,17 @@
 import bot from '../../bot';
 import moment from 'moment';
 import { encodeCallbackData } from '../../utils/index';
-import { ReminderType } from './types';
-import { createNewReminder } from './utils';
+import { Reminder, ReminderType } from './types';
+import { createNewReminder, formatReminderForDisplay } from './utils';
 import { DataType } from '../../types';
+import ReminderModel from './models/reminder';
 
 bot.command('reminder', (ctx) => {
-  ctx.reply('What would you like to do?\n' + '1. Create new reminder /newreminder');
+  ctx.reply(
+    'What would you like to do?\n' +
+      '1. Create new reminder /newreminder\n' +
+      '2. List your scheduled reminders /listreminder',
+  );
 });
 
 bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
@@ -64,4 +69,27 @@ bot.command('newreminder', (ctx) => {
       '/newreminder DD-MM-YY hh:mm {reminder text} \n' +
       'e.g. /newreminder 25-12-21 17:00 remember to bring christmas present!',
   );
+});
+
+bot.command('listreminder', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  const { id: userId, username } = ctx.message.from;
+
+  try {
+    const reminders = await ReminderModel.find({ chatId, userId });
+    if (reminders.length === 0) {
+      ctx.reply('You have no scheduled reminders!');
+    } else {
+      const reminderStrings = [`List of scheduled reminders for @${username}`];
+      reminders.forEach((reminder: Reminder, index: number) => {
+        reminderStrings.push(`${index + 1}. ` + formatReminderForDisplay(reminder));
+      });
+      ctx.reply(reminderStrings.join('\n'));
+    }
+  } catch (err) {
+    console.error(
+      `Failed to retrieve list of reminders for user ${username} (${userId}). ` + err.message,
+    );
+    ctx.reply('Sorry! Family bot failed to retrieve your list of scheduled reminders!');
+  }
 });
