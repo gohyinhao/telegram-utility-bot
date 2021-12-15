@@ -9,6 +9,7 @@
   "scripts": {
     "start": "tsc && node dist/index.js",
     "start:dev": "ts-node-dev src/app.ts",
+    "tsc": "./node_modules/typescript/bin/tsc",
     "lint": "eslint . --exit .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
