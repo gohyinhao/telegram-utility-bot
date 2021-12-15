@@ -1,5 +1,5 @@
-const bot = require('../../bot');
-const { getRandomInt } = require('../../utils/index');
+import bot from '../../bot';
+import { getRandomInt } from '../../utils/index';
 
 const bobaOptions = ['Bober', 'KOI', 'R&B', 'LiHo'];
 

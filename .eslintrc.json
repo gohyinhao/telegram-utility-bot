@@ -1,10 +1,11 @@
 {
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "env": {
     "node": true
   },
-  "parser": "@babel/eslint-parser",
-  "parserOptions": {
-    "requireConfigFile": false
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

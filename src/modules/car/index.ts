@@ -1,7 +1,9 @@
-const bot = require('../../bot');
-const CarInfo = require('./models/carInfo');
-const { DataType } = require('../../constants');
-const { formatTime, encodeCallbackData } = require('../../utils/index');
+import bot from '../../bot';
+import CarInfo from './models/carInfo';
+import { DataType } from '../../types';
+import { formatTime, encodeCallbackData } from '../../utils/index';
+
+export * from './callbackQuery';
 
 bot.hears(/\/.*car.*/, async (ctx) => {
   const chatId = ctx.message.chat.id;
@@ -13,7 +15,9 @@ bot.hears(/\/.*car.*/, async (ctx) => {
         throw new Error();
       }
       ctx.reply(
-        `Car was last parked at Floor ${carInfo.location} on ${formatTime(carInfo.updatedAt)}.`,
+        `Car was last parked at Floor ${carInfo.location} on ${formatTime(
+          carInfo.updatedAt.valueOf(),
+        )}.`,
       );
     } catch (err) {
       ctx.reply('Unable to find parking info.');
@@ -53,5 +57,3 @@ bot.hears(/\/.*car.*/, async (ctx) => {
     );
   }
 });
-
-module.exports = { ...require('./callbackQuery') };

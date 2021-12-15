@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { ReminderFrequency, ReminderType } = require('../constants');
+import mongoose from 'mongoose';
+import { Reminder, ReminderFrequency, ReminderType } from '../types';
 
 const reminderSchema = new mongoose.Schema(
   {
@@ -40,4 +40,4 @@ const reminderSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model('Reminder', reminderSchema);
+export default mongoose.model<Reminder>('Reminder', reminderSchema);

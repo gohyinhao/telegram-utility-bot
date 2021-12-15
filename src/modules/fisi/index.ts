@@ -1,5 +1,5 @@
-const bot = require('../../bot');
-const { getRandomInt } = require('../../utils/index');
+import bot from '../../bot';
+import { getRandomInt } from '../../utils/index';
 
 const fisiMessages = [
   'There is no real fisi. They are both fisi.',

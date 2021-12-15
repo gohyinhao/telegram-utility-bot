@@ -1,9 +1,9 @@
-const bot = require('../../bot');
-const moment = require('moment');
-const { encodeCallbackData } = require('../../utils/index');
-const { ReminderType } = require('./constants');
-const { createNewReminder } = require('./utils');
-const { DataType } = require('../../constants');
+import bot from '../../bot';
+import moment from 'moment';
+import { encodeCallbackData } from '../../utils/index';
+import { ReminderType } from './types';
+import { createNewReminder } from './utils';
+import { DataType } from '../../types';
 
 bot.command('reminder', (ctx) => {
   ctx.reply('What would you like to do?\n' + '1. Create new reminder /newreminder');
@@ -16,6 +16,9 @@ bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
   const reminderText = ctx.match[2];
 
   try {
+    if (!username) {
+      throw new Error("Missing user's username");
+    }
     // need to create reminder first and retrieve from db later due to max byte limit of 64 in callback data
     const reminder = await createNewReminder({
       chatId,

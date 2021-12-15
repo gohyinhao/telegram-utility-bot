@@ -1,4 +1,4 @@
-const bot = require('../bot');
+import bot from '../bot';
 
 bot.hears(/\/echo (.+)/, (ctx) => {
   // 'match' is the result of executing the regexp above on the text content
