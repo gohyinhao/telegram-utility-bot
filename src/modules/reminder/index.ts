@@ -5,6 +5,7 @@ import { Reminder, ReminderType } from './types';
 import { createNewReminder, formatReminderForDisplay } from './utils';
 import { DataType } from '../../types';
 import ReminderModel from './models/reminder';
+import { MAX_REMINDER_TEXT_LENGTH } from './constants';
 
 bot.command('reminder', (ctx) => {
   ctx.reply(
@@ -19,6 +20,11 @@ bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
   const { id: userId, username } = ctx.message.from;
   const reminderTimestamp = moment(ctx.match[1], 'D-M-YY H:mm').valueOf();
   const reminderText = ctx.match[2];
+
+  if (reminderText.trim().length > MAX_REMINDER_TEXT_LENGTH) {
+    ctx.reply('Sorry! Please limit reminder text length to 500!');
+    return;
+  }
 
   try {
     if (!username) {
@@ -59,7 +65,7 @@ bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
     });
   } catch (err) {
     console.error(err.message);
-    ctx.reply('Failed to create reminder. Database error.');
+    ctx.reply('Failed to create reminder. Sorry!');
   }
 });
 

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { MAX_REMINDER_TEXT_LENGTH } from '../constants';
 import { Reminder, ReminderFrequency, ReminderType } from '../types';
 
 const reminderSchema = new mongoose.Schema(
@@ -24,6 +25,7 @@ const reminderSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minLength: 1,
+      maxlength: MAX_REMINDER_TEXT_LENGTH,
     },
     type: {
       type: String,
