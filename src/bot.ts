@@ -14,7 +14,9 @@ bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
 // @ts-expect-error incorrect typing by Telegraf causing startWebhook method to be private
 bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
 
-bot.start((ctx) => ctx.reply('Hello, I am the Goh Family Bot!'));
+bot.start((ctx) =>
+  ctx.reply('Hello, I am the Goh Family Bot!\n' + 'Type /help for list of options!'),
+);
 bot.launch();
 
 // Enable graceful stop
