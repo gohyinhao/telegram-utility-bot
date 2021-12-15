@@ -3,7 +3,7 @@ import schedule from '../../scheduler';
 import { Reminder, ReminderFrequency } from './types';
 import moment from 'moment';
 import { Telegraf } from 'telegraf';
-import { OmitDbFields } from 'types';
+import { OmitDbFields } from 'src/types';
 import { formatTime } from '../../utils';
 
 export const getNewTimestampAfterInterval = (

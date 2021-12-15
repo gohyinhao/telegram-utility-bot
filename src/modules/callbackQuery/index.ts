@@ -1,5 +1,5 @@
-import { ParkingLocation } from 'modules/car/types';
-import { ReminderFrequency, ReminderType } from 'modules/reminder/types';
+import { ParkingLocation } from 'src/modules/car/types';
+import { ReminderFrequency, ReminderType } from 'src/modules/reminder/types';
 import bot from '../../bot';
 import { DataType } from '../../types';
 import { parseCallbackData } from '../../utils/index';
