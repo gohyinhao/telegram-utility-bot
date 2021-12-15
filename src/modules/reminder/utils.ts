@@ -42,6 +42,16 @@ export const createNewReminder = async (reminderFields: OmitDbFields<Reminder>) 
   return await newReminderInfo.save();
 };
 
+export const deleteReminder = async (reminderId: string) => {
+  const reminder = await ReminderModel.findById(reminderId);
+  if (!reminder) {
+    throw new Error('No reminder found in db.');
+  }
+  const scheduledJob = schedule.scheduledJobs[reminder._id.toString()];
+  scheduledJob.cancel();
+  reminder.remove();
+};
+
 export const getReminderTemplate = (text: string, username: string): string => {
   return `Family bot reminder for @${username}\n` + text;
 };
@@ -92,11 +102,14 @@ export const scheduleRecurringReminderTask = (bot: Telegraf, reminder: Reminder)
   });
 };
 
-export const formatReminderForDisplay = (reminder: Reminder): string => {
+export const formatReminderForDisplay = (reminder: Reminder, addDeleteCommand = false): string => {
   const { reminderTimestamp, reminderText, type, frequency } = reminder;
   let result = `${formatTime(reminderTimestamp)} | ${reminderText} | ${type}`;
   if (frequency) {
     result += ` every ${frequency}`;
+  }
+  if (addDeleteCommand) {
+    result += ` /deletereminder${reminder._id.toString()}`;
   }
   return result;
 };

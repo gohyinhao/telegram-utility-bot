@@ -2,7 +2,7 @@ import bot from '../../bot';
 import moment from 'moment';
 import { encodeCallbackData } from '../../utils/index';
 import { Reminder, ReminderType } from './types';
-import { createNewReminder, formatReminderForDisplay } from './utils';
+import { createNewReminder, deleteReminder, formatReminderForDisplay } from './utils';
 import { DataType } from '../../types';
 import ReminderModel from './models/reminder';
 import { MAX_REMINDER_TEXT_LENGTH } from './constants';
@@ -11,7 +11,7 @@ bot.command('reminder', (ctx) => {
   ctx.reply(
     'What would you like to do?\n' +
       '1. Create new reminder /newreminder\n' +
-      '2. List your scheduled reminders /listreminder',
+      '2. List your scheduled reminders to view or delete /listreminder',
   );
 });
 
@@ -88,7 +88,7 @@ bot.command('listreminder', async (ctx) => {
     } else {
       const reminderStrings = [`List of scheduled reminders for @${username}`];
       reminders.forEach((reminder: Reminder, index: number) => {
-        reminderStrings.push(`${index + 1}. ` + formatReminderForDisplay(reminder));
+        reminderStrings.push(`${index + 1}. ` + formatReminderForDisplay(reminder, true));
       });
       ctx.reply(reminderStrings.join('\n'));
     }
@@ -97,5 +97,21 @@ bot.command('listreminder', async (ctx) => {
       `Failed to retrieve list of reminders for user ${username} (${userId}). ` + err.message,
     );
     ctx.reply('Sorry! Family bot failed to retrieve your list of scheduled reminders!');
+  }
+});
+
+bot.hears(/\/deletereminder(.*)$/, async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  const { id: userId, username } = ctx.message.from;
+  const reminderId = ctx.match[1];
+  try {
+    await deleteReminder(reminderId);
+    ctx.reply('Reminder successfully deleted!');
+  } catch (err) {
+    console.error(
+      `Failed to delete reminder for user ${username} (${userId}) in chat ${chatId}. ` +
+        err.message,
+    );
+    ctx.reply('Invalid delete reminder command! Nothing was deleted!');
   }
 });
