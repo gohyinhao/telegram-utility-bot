@@ -10,11 +10,10 @@ bot.help((ctx) => {
   ctx.reply(
     'What can Family Bot help you with?\n' +
       '1. Car-related help. /car\n' +
-      '2. Fisi-related help. /fisi\n' +
-      '3. What boba should we get? /boba\n' +
+      '2. Reminder-related help. /reminder\n' +
+      '3. Boba-related help. /boba\n' +
       "4. What's for lunch? /lunch\n" +
       '5. Who to throw the rubbish?! /rubbish\n' +
-      '6. Reminder-related help. /reminder\n' +
       '\nTo hear about upcoming features, /futurefeatures',
   );
 });
@@ -26,6 +25,7 @@ bot.command('futurefeatures', (ctx) => {
       '- Weather forecast function\n' +
       '- Map function, maybe\n' +
       '- Bus waiting time function, maybe\n' +
-      '- Improvement to lunch and boba functions\n',
+      '- Improvement to lunch and boba functions\n' +
+      '- Grocery list function\n',
   );
 });
