@@ -7,6 +7,7 @@ const bobaRecordSchema = new mongoose.Schema(
     chatId: {
       type: Number,
       required: true,
+      unique: true,
     },
     bobaStore: {
       type: String,

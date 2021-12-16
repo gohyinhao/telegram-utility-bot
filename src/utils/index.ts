@@ -1,8 +1,10 @@
 import moment from 'moment';
 import { DataType } from '../types';
 
-export const getRandomInt = (max: number): number => {
-  return Math.floor(Math.random() * max);
+export const getRandomInt = (max: number, min = 0): number => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
 const DELIMITER = String.fromCharCode(31);

@@ -1,4 +1,5 @@
 import bot from '../../bot';
+import { getRandomInt } from '../../utils';
 import { MAX_BOBA_STORE_LENGTH } from './constants';
 import BobaRecordModel from './models/bobaRecord';
 import { BobaRecord } from './types';
@@ -9,7 +10,8 @@ bot.command('boba', (ctx) => {
     'What would you like to do?\n' +
       '1. I need more detailed help with boba functions /bobahelp\n' +
       '2. Add new boba store to list /addbobastore\n' +
-      '3. List all the boba store in the list /listbobastore\n',
+      '3. List all the boba store in the list /listbobastore\n' +
+      '4. What boba to drink today? /randombobastore\n',
   );
 });
 
@@ -55,6 +57,10 @@ bot.command('listbobastore', async (ctx) => {
   let response = 'List of boba stores\n';
   try {
     const bobaRecords = await BobaRecordModel.find({ chatId });
+    if (bobaRecords.length === 0) {
+      ctx.reply('No boba stores added to the list!');
+      return;
+    }
     bobaRecords.forEach((bobaRecord: BobaRecord, index: number) => {
       response += `${index + 1}. ${bobaRecord.bobaStore}\n`;
     });
@@ -62,5 +68,21 @@ bot.command('listbobastore', async (ctx) => {
   } catch (err) {
     console.error(`Failed to retrieve boba store list for chat ${chatId}. ` + err.message);
     ctx.reply('Failed to list boba stores. Family Bot is sorry!');
+  }
+});
+
+bot.command('randombobastore', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  try {
+    const bobaRecords = await BobaRecordModel.find({ chatId });
+    if (bobaRecords.length === 0) {
+      ctx.reply('Add one of your favourite boba stores with /addbobastore command first!');
+      return;
+    }
+    const randomBobaRecord = bobaRecords[getRandomInt(bobaRecords.length)];
+    ctx.reply(`How about having some ${randomBobaRecord.bobaStore} today?`);
+  } catch (err) {
+    console.error(`Failed to get random boba store for chat ${chatId}. ` + err.message);
+    ctx.reply('Something is wrong! Family bot failed to give boba suggestion. Sorry!');
   }
 });
