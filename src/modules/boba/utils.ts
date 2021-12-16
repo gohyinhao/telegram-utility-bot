@@ -2,7 +2,12 @@ import { OmitDbFields } from 'src/types';
 import BobaRecordModel from './models/bobaRecord';
 import { BobaRecord } from './types';
 
-export const createNewBobaRecord = async (bobaFields: OmitDbFields<BobaRecord>) => {
+// have to omit favouriteOrders because mongoose allows passing of object or map for creation but their typings do not support this
+export const createNewBobaRecord = async (
+  bobaFields: Omit<OmitDbFields<BobaRecord>, 'favouriteOrders'> & {
+    favouriteOrders?: Map<string | number, string> | Record<string | number, string>;
+  },
+) => {
   const newBobaRecord = new BobaRecordModel(bobaFields);
   return await newBobaRecord.save();
 };

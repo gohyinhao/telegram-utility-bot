@@ -1,10 +1,10 @@
-import { ObjectId } from 'mongoose';
+import { Types, ObjectId } from 'mongoose';
 
 export interface BobaRecord {
   _id: ObjectId;
   chatId: number;
   bobaStore: string;
-  favouriteOrder?: Record<number, string>;
+  favouriteOrders?: Types.Map<string>;
   createdAt: Date;
   updatedAt: Date;
 }
