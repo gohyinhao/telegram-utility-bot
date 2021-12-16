@@ -8,14 +8,6 @@ const bobaRecordSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    userId: {
-      type: Number,
-      required: true,
-    },
-    username: {
-      type: String,
-      required: true,
-    },
     bobaStore: {
       type: String,
       required: true,
@@ -24,11 +16,15 @@ const bobaRecordSchema = new mongoose.Schema(
       minlength: 1,
       maxlength: MAX_BOBA_STORE_LENGTH,
     },
-    favouriteOrder: {
-      type: String,
-      trim: true,
-      minLength: 1,
-      maxlength: MAX_BOBA_FAVE_LENGTH,
+    favouriteOrders: {
+      // key is user id, value is user's fave boba for this store
+      type: Map,
+      of: {
+        type: String,
+        trim: true,
+        minLength: 1,
+        maxlength: MAX_BOBA_FAVE_LENGTH,
+      },
     },
   },
   {

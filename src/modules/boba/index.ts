@@ -1,5 +1,6 @@
 import bot from '../../bot';
 import { MAX_BOBA_STORE_LENGTH } from './constants';
+import BobaRecordModel from './models/bobaRecord';
 import { createNewBobaRecord } from './utils';
 
 bot.command('boba', (ctx) => {
@@ -12,10 +13,9 @@ bot.command('boba', (ctx) => {
 
 bot.hears(/\/addbobastore (.+)/, async (ctx) => {
   const chatId = ctx.message.chat.id;
-  const { id: userId, username } = ctx.message.from;
-  const bobaStore = ctx.match[1];
+  const bobaStore = ctx.match[1].trim().toLowerCase();
 
-  if (bobaStore.trim().length > MAX_BOBA_STORE_LENGTH) {
+  if (bobaStore.length > MAX_BOBA_STORE_LENGTH) {
     ctx.reply(
       `Sorry! Boba store cannot exceed text length of ${MAX_BOBA_STORE_LENGTH} characters!`,
     );
@@ -23,18 +23,19 @@ bot.hears(/\/addbobastore (.+)/, async (ctx) => {
   }
 
   try {
-    if (!username) {
-      throw new Error("Missing user's username");
+    const bobaRecord = await BobaRecordModel.findOne({ chatId, bobaStore });
+    if (bobaRecord) {
+      ctx.reply('Boba store you are trying to add already exists in the list!');
+      return;
     }
+
     await createNewBobaRecord({
       chatId,
-      userId,
-      username,
       bobaStore,
     });
     ctx.reply('New boba store successfully added to the list!');
   } catch (err) {
-    console.error(`Failed to add new boba store for user ${username} (${userId}). ` + err.message);
+    console.error(`Failed to add new boba store for chat ${chatId}. ` + err.message);
     ctx.reply('Failed to add new boba store to the list. Sorry!');
   }
 });
