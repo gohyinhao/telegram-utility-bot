@@ -24,6 +24,9 @@ bot.hears(/\/newreminder (\d?\d-\d?\d-\d\d \d?\d:\d\d) (.+)/, async (ctx) => {
   if (reminderText.trim().length > MAX_REMINDER_TEXT_LENGTH) {
     ctx.reply('Sorry! Please limit reminder text length to 500!');
     return;
+  } else if (reminderTimestamp < moment().add(1, 'minute').startOf('minute').valueOf()) {
+    ctx.reply('Sorry! Please set reminder to be at least 1 min from now!');
+    return;
   }
 
   try {
