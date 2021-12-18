@@ -9,13 +9,29 @@ bot.command('boba', (ctx) => {
   ctx.reply(
     'What would you like to do?\n' +
       '\nGeneral\n' +
-      '1. What boba to drink today? /randombobastore\n' +
+      '1. What boba to drink today? /whatboba\n' +
       '2. I need more detailed help with boba functions /bobahelp\n' +
       '\nBoba Store Management\n' +
       '1. Add new boba store to list /addbobastore\n' +
       '2. List all the boba store in the list /listbobastore\n' +
       '3. Delete boba store from list /deletebobastore\n',
   );
+});
+
+bot.command('whatboba', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  try {
+    const bobaRecords = await BobaRecordModel.find({ chatId });
+    if (bobaRecords.length === 0) {
+      ctx.reply('Add one of your favourite boba stores with /addbobastore command first!');
+      return;
+    }
+    const randomBobaRecord = bobaRecords[getRandomInt(bobaRecords.length)];
+    ctx.reply(`How about having some ${randomBobaRecord.bobaStore} today?`);
+  } catch (err) {
+    console.error(`Failed to get random boba store for chat ${chatId}. ` + err.message);
+    ctx.reply('Something is wrong! Family bot failed to give boba suggestion. Sorry!');
+  }
 });
 
 bot.hears(/\/addbobastore (.+)/, async (ctx) => {
@@ -71,22 +87,6 @@ bot.command('listbobastore', async (ctx) => {
   } catch (err) {
     console.error(`Failed to retrieve boba store list for chat ${chatId}. ` + err.message);
     ctx.reply('Failed to list boba stores. Family Bot is sorry!');
-  }
-});
-
-bot.command('randombobastore', async (ctx) => {
-  const chatId = ctx.message.chat.id;
-  try {
-    const bobaRecords = await BobaRecordModel.find({ chatId });
-    if (bobaRecords.length === 0) {
-      ctx.reply('Add one of your favourite boba stores with /addbobastore command first!');
-      return;
-    }
-    const randomBobaRecord = bobaRecords[getRandomInt(bobaRecords.length)];
-    ctx.reply(`How about having some ${randomBobaRecord.bobaStore} today?`);
-  } catch (err) {
-    console.error(`Failed to get random boba store for chat ${chatId}. ` + err.message);
-    ctx.reply('Something is wrong! Family bot failed to give boba suggestion. Sorry!');
   }
 });
 
