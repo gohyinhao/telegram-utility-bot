@@ -12,9 +12,16 @@ export const createNewBobaRecord = async (
   return await newBobaRecord.save();
 };
 
-export const formatBobaStoreForDisplay = (record: BobaRecord, addDeleteCommand = false): string => {
+export const formatBobaStoreForDisplay = (
+  record: BobaRecord,
+  addListFaveCommand = false,
+  addDeleteCommand = false,
+): string => {
   const { _id, bobaStore } = record;
   let result = bobaStore;
+  if (addListFaveCommand) {
+    result += ` /listfavebobastore${_id.toString()}`;
+  }
   if (addDeleteCommand) {
     result += ` /deletebobastore${_id.toString()}`;
   }

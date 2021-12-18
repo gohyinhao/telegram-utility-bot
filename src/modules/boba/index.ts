@@ -96,7 +96,7 @@ bot.command('listbobastore', async (ctx) => {
       return;
     }
     bobaRecords.forEach((bobaRecord: BobaRecord, index: number) => {
-      response += `${index + 1}. ${formatBobaStoreForDisplay(bobaRecord)}\n`;
+      response += `${index + 1}. ${formatBobaStoreForDisplay(bobaRecord, true)}\n`;
     });
     ctx.reply(response);
   } catch (err) {
@@ -130,7 +130,7 @@ bot.command('deletebobastore', async (ctx) => {
       return;
     }
     bobaRecords.forEach((bobaRecord: BobaRecord, index: number) => {
-      response += `${index + 1}. ${formatBobaStoreForDisplay(bobaRecord, true)}\n`;
+      response += `${index + 1}. ${formatBobaStoreForDisplay(bobaRecord, false, true)}\n`;
     });
     ctx.reply(response);
   } catch (err) {
@@ -240,5 +240,29 @@ bot.hears(/\/deletefaveboba(.*)$/, async (ctx) => {
   } catch (err) {
     console.error("Error while deleting user's fave order from boba record. " + err.message);
     ctx.reply('Failed to delete your favourite order. Sorry!');
+  }
+});
+
+bot.hears(/\/listfavebobastore(.*)$/, async (ctx) => {
+  const bobaRecordId = ctx.match[1];
+  try {
+    const bobaRecord = await BobaRecordModel.findById(bobaRecordId);
+    if (!bobaRecord) {
+      ctx.reply("Family bot can't find the boba store record you are looking for!");
+      return;
+    }
+    if (!bobaRecord.favouriteOrders) {
+      ctx.reply(`No favourites added for ${bobaRecord.bobaStore} yet!`);
+      return;
+    }
+    let response = `List of favourites for ${bobaRecord.bobaStore}\n`;
+    for (const [userId, faveOrder] of bobaRecord.favouriteOrders.entries()) {
+      const { user } = await ctx.getChatMember(Number(userId));
+      response += `${user.username ? `@${user.username}` : 'Missing user name'} | ${faveOrder}\n`;
+    }
+    ctx.reply(response);
+  } catch (err) {
+    console.error('Error while listing fave orders from boba record. ' + err.message);
+    ctx.reply("Failed to retrieve everyone's favourites...Sorry!");
   }
 });
