@@ -3,8 +3,13 @@ import { DataType } from '../../types';
 import { encodeCallbackData, getRandomInt, setItemInCache } from '../../utils';
 import { MAX_BOBA_FAVE_LENGTH, MAX_BOBA_STORE_LENGTH } from './constants';
 import BobaRecordModel from './models/bobaRecord';
-import { BobaRecord } from './types';
-import { createNewBobaRecord, formatBobaStoreForDisplay } from './utils';
+import { BobaFavourite, BobaRecord } from './types';
+import {
+  createNewBobaRecord,
+  formatBobaFavouriteForDisplay,
+  formatBobaStoreForDisplay,
+  getUserFaveBoba,
+} from './utils';
 
 bot.command('boba', (ctx) => {
   ctx.reply(
@@ -17,7 +22,8 @@ bot.command('boba', (ctx) => {
       '2. List all the boba store in the list /listbobastore\n' +
       '3. Delete boba store from list /deletebobastore\n' +
       '\nBoba Favourites Management\n' +
-      '1. Add new favourite boba order /addbobafave\n',
+      '1. Add new favourite boba order /addfaveboba\n' +
+      '2. List all your added favourites! /listfaveboba\n',
   );
 });
 
@@ -138,7 +144,7 @@ bot.command('deletebobastore', async (ctx) => {
 /**
  * BOBA FAVE RELATED COMMANDS
  */
-bot.hears(/\/addbobafave(.*)/, async (ctx) => {
+bot.hears(/\/addfaveboba(.*)/, async (ctx) => {
   const chatId = ctx.message.chat.id;
   const faveOrder = ctx.match[1].trim();
 
@@ -189,5 +195,28 @@ bot.hears(/\/addbobafave(.*)/, async (ctx) => {
       `Failed to fetch boba records while adding boba fave for chat ${chatId}. ` + err.message,
     );
     ctx.reply('Failed to check if there are existing boba store records. Family Bot is sorry!');
+  }
+});
+
+bot.command('listfaveboba', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  const userId = ctx.message.from.id;
+  const username = ctx.message.from.username;
+  let response = `List of favourites${username ? ` for ${username}` : ''}\n`;
+  try {
+    const faveOrders: BobaFavourite[] = await getUserFaveBoba(chatId, userId);
+    if (faveOrders.length === 0) {
+      ctx.reply('No favourite orders added yet so far!');
+      return;
+    }
+    faveOrders.forEach((record: BobaFavourite, index: number) => {
+      response += `${index + 1}. ${formatBobaFavouriteForDisplay(record)}\n`;
+    });
+    ctx.reply(response);
+  } catch (err) {
+    console.error(
+      `Failed to retrieve fave boba list for chat ${chatId} for user ${userId}. ` + err.message,
+    );
+    ctx.reply('Failed to retrieve your favourites! Sorry!');
   }
 });

@@ -8,3 +8,5 @@ export interface BobaRecord {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type BobaFavourite = [bobaRecordId: string, bobaStore: string, faveOrder: string];
