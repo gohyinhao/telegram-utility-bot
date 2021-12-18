@@ -21,7 +21,6 @@ bot.help((ctx) => {
 bot.command('futurefeatures', (ctx) => {
   ctx.reply(
     'List of upcoming features planned!\n' +
-      '- Boba favourites to list your fave boba, so others can check and easily purchase for you\n' +
       '- Weather forecast function\n' +
       '- Map function, maybe\n' +
       '- Bus waiting time function, maybe\n' +

@@ -46,6 +46,21 @@ bot.command('whatboba', async (ctx) => {
   }
 });
 
+bot.command('bobahelp', (ctx) => {
+  ctx.reply(
+    'Let Family Bot explain how the boba function works!\n' +
+      '\nThe first thing to do is to first add your favourite boba stores to the list using /addbobastore The boba store list is shared among all users!\n' +
+      '\nOnce there are boba stores added to the list, there are more things we can do:\n' +
+      "1. Can't decide what to drink today? /whatboba\n" +
+      '2. Want to see which boba stores you have added to the list? /listbobastore\n' +
+      '3. Have a boba store you dislike in the list? Delete it with /deletebobastore\n' +
+      "\nFamily Bot is also capable of keeping track of everyone's favourite orders!\n" +
+      '1. Add a favourite drink! /addfaveboba\n' +
+      '2. List all your added favourites for viewing/delete! /listfaveboba\n' +
+      "\nOnce everyone has started adding their favourites, you can view everyone's favourites by store with the command shown after you use /listbobastore\n",
+  );
+});
+
 /**
  * BOBA STORE RELATED COMMANDS
  */
