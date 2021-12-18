@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { DataType } from '../types';
 
+export * from './cache';
+
 export const getRandomInt = (max: number, min = 0): number => {
   min = Math.ceil(min);
   max = Math.floor(max);

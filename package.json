@@ -10,12 +10,14 @@
     "start": "node dist/src/app.js",
     "start:dev": "ts-node-dev src/app.ts",
     "build": "tsc",
+    "redis": "npx redis-server",
     "lint": "eslint . --exit .ts",
     "postinstall": "npm run build"
   },
   "author": "Goh Yin Hao",
   "license": "ISC",
   "devDependencies": {
+    "@types/ioredis": "^4.28.5",
     "@types/node": "^16.11.13",
     "@types/node-schedule": "^1.3.2",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
@@ -27,6 +29,7 @@
   },
   "dependencies": {
     "dotenv": "^10.0.0",
+    "ioredis": "^4.28.2",
     "moment": "^2.29.1",
     "mongoose": "^6.1.1",
     "node-schedule": "^2.1.0",

@@ -7,4 +7,5 @@ export enum DataType {
   PARKING_INFO = 'parking',
   REMINDER_TYPE = 'reminder-type',
   REMINDER_FREQ = 'reminder-freq',
+  BOBA_STORE = 'boba-store',
 }

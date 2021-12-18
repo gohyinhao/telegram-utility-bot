@@ -1,6 +1,7 @@
 import bot from '../../bot';
-import { getRandomInt } from '../../utils';
-import { MAX_BOBA_STORE_LENGTH } from './constants';
+import { DataType } from '../../types';
+import { encodeCallbackData, getRandomInt, setItemInCache } from '../../utils';
+import { MAX_BOBA_FAVE_LENGTH, MAX_BOBA_STORE_LENGTH } from './constants';
 import BobaRecordModel from './models/bobaRecord';
 import { BobaRecord } from './types';
 import { createNewBobaRecord, formatBobaStoreForDisplay } from './utils';
@@ -14,10 +15,15 @@ bot.command('boba', (ctx) => {
       '\nBoba Store Management\n' +
       '1. Add new boba store to list /addbobastore\n' +
       '2. List all the boba store in the list /listbobastore\n' +
-      '3. Delete boba store from list /deletebobastore\n',
+      '3. Delete boba store from list /deletebobastore\n' +
+      '\nBoba Favourites Management\n' +
+      '1. Add new favourite boba order /addbobafave\n',
   );
 });
 
+/**
+ * GENERAL COMMANDS
+ */
 bot.command('whatboba', async (ctx) => {
   const chatId = ctx.message.chat.id;
   try {
@@ -34,6 +40,9 @@ bot.command('whatboba', async (ctx) => {
   }
 });
 
+/**
+ * BOBA STORE RELATED COMMANDS
+ */
 bot.hears(/\/addbobastore (.+)/, async (ctx) => {
   const chatId = ctx.message.chat.id;
   const bobaStore = ctx.match[1].trim().toLowerCase();
@@ -123,5 +132,62 @@ bot.command('deletebobastore', async (ctx) => {
       `Failed to retrieve boba store list for chat ${chatId} for deletion. ` + err.message,
     );
     ctx.reply('Failed to list boba stores for deletion. Family Bot is sorry!');
+  }
+});
+
+/**
+ * BOBA FAVE RELATED COMMANDS
+ */
+bot.hears(/\/addbobafave(.*)/, async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  const faveOrder = ctx.match[1].trim();
+
+  try {
+    const bobaRecords = await BobaRecordModel.find({ chatId });
+    if (bobaRecords.length === 0) {
+      ctx.reply(
+        'Someone needs to add a boba store to the list first before you can add a favourite!',
+      );
+      return;
+    }
+
+    if (!faveOrder) {
+      ctx.reply(
+        'Add your fave boba order using the following format. you can indicate the boba store later on! \n' +
+          '/addbobafave {fave boba order} \n' +
+          'e.g. /addbobafave honey milk tea 25% with pearls, less ice',
+      );
+      return;
+    }
+
+    if (faveOrder.length > MAX_BOBA_FAVE_LENGTH) {
+      ctx.reply(
+        `Sorry! Boba fave cannot exceed text length of ${MAX_BOBA_FAVE_LENGTH} characters!`,
+      );
+      return;
+    }
+
+    const messageId = ctx.message.message_id;
+    setItemInCache(chatId, messageId, faveOrder, 30);
+
+    ctx.reply('Which boba store is this drink from?', {
+      reply_markup: {
+        inline_keyboard: bobaRecords.map((record: BobaRecord) => [
+          {
+            text: record.bobaStore,
+            callback_data: encodeCallbackData(
+              DataType.BOBA_STORE,
+              record._id.toString(),
+              messageId,
+            ),
+          },
+        ]),
+      },
+    });
+  } catch (err) {
+    console.error(
+      `Failed to fetch boba records while adding boba fave for chat ${chatId}. ` + err.message,
+    );
+    ctx.reply('Failed to check if there are existing boba store records. Family Bot is sorry!');
   }
 });
