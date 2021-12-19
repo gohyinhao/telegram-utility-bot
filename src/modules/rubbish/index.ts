@@ -67,3 +67,20 @@ bot.command('addrubbish', (ctx) => {
       'e.g. /addrubbish doggo man',
   );
 });
+
+bot.command('clearrubbish', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  try {
+    const rubbishRecord = await RubbishRecordModel.findOne({ chatId });
+    if (!rubbishRecord || rubbishRecord.options.length === 0) {
+      ctx.reply('No assigned rubbish thrower! Nothing to clear!');
+      return;
+    }
+    rubbishRecord.options = [];
+    await rubbishRecord.save();
+    ctx.reply("Rubbish thrower list cleared! Who's going to throw your rubbish now?!");
+  } catch (err) {
+    console.error(`Failed to clear rubbish thrower list for chat ${chatId}. ` + err.message);
+    ctx.reply('Something went wrong! No break for the current rubbish throwers!');
+  }
+});
