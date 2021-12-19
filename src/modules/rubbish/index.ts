@@ -1,4 +1,5 @@
 import bot from '../../bot';
+import { getRandomInt } from '../../utils';
 import { MAX_RUBBISH_OPTION_LENGTH } from './constants';
 import RubbishRecordModel from './models/rubbishRecord';
 
@@ -10,6 +11,22 @@ bot.command('rubbish', (ctx) => {
       '3. List current rubbish throwers /listrubbish\n' +
       '4. Clear rubbish thrower list /clearrubbish\n',
   );
+});
+
+bot.command('whorubbish', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  try {
+    const rubbishRecord = await RubbishRecordModel.findOne({ chatId });
+    if (!rubbishRecord || rubbishRecord.options.length === 0) {
+      ctx.reply('Add a rubbish thrower with /addrubbish command first!');
+      return;
+    }
+    const randomRubbishThrower = rubbishRecord.options[getRandomInt(rubbishRecord.options.length)];
+    ctx.reply(`${randomRubbishThrower}, please go throw the rubbish!`);
+  } catch (err) {
+    console.error(`Failed to get random rubbish thrower for chat ${chatId}. ` + err.message);
+    ctx.reply('Something went wrong! Guess the rubbish can be left untouched for awhile longer...');
+  }
 });
 
 bot.hears(/\/addrubbish (.+)/, async (ctx) => {
