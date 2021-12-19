@@ -8,4 +8,5 @@ export enum DataType {
   REMINDER_TYPE = 'reminder-type',
   REMINDER_FREQ = 'reminder-freq',
   BOBA_STORE = 'boba-store',
+  FOOD_STORE = 'food-store',
 }

@@ -12,7 +12,7 @@ bot.help((ctx) => {
       '1. Car-related help. /car\n' +
       '2. Reminder-related help. /reminder\n' +
       '3. Boba-related help. /boba\n' +
-      "4. What's for lunch? /lunch\n" +
+      '4. Food-related help /food\n' +
       '5. Who to throw the rubbish?! /rubbish\n' +
       '\nTo hear about upcoming features, /futurefeatures',
   );
@@ -24,7 +24,7 @@ bot.command('futurefeatures', (ctx) => {
       '- Weather forecast function\n' +
       '- Map function, maybe\n' +
       '- Bus waiting time function, maybe\n' +
-      '- Improvement to lunch and boba functions\n' +
+      '- Improvement to rubbish function\n' +
       '- Grocery list function\n',
   );
 });

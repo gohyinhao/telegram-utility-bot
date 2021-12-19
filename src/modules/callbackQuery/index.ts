@@ -5,6 +5,7 @@ import { DataType } from '../../types';
 import { parseCallbackData } from '../../utils/index';
 import { handleAddFaveBobaDrinkCallbackQuery } from '../boba/callbackQuery';
 import { handleParkingInfoCallbackQuery } from '../car';
+import { handleAddFaveFoodOrderCallbackQuery } from '../food/callbackQuery';
 import {
   handleReminderTypeCallbackQuery,
   handleReminderFreqCallbackQuery,
@@ -29,6 +30,9 @@ bot.on('callback_query', async (ctx) => {
       break;
     case DataType.BOBA_STORE:
       await handleAddFaveBobaDrinkCallbackQuery(ctx, chatId, userId, ...(args as [string, string]));
+      break;
+    case DataType.FOOD_STORE:
+      await handleAddFaveFoodOrderCallbackQuery(ctx, chatId, userId, ...(args as [string, string]));
       break;
   }
 
