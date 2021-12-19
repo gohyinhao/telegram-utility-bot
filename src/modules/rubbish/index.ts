@@ -9,7 +9,8 @@ bot.command('rubbish', (ctx) => {
       '1. Whose turn is it to throw the rubbish?! /whorubbish\n' +
       '2. Add potential rubbish thrower /addrubbish\n' +
       '3. List current rubbish throwers /listrubbish\n' +
-      '4. Clear rubbish thrower list /clearrubbish\n',
+      '4. Delete a rubbish thrower /deleterubbish\n' +
+      '5. Clear rubbish thrower list /clearrubbish\n',
   );
 });
 
@@ -86,6 +87,35 @@ bot.command('listrubbish', async (ctx) => {
     console.error(`Failed to list rubbish throwers for chat ${chatId}. ` + err.message);
     ctx.reply('Sorry! Family bot failed to retrieve list of rubbish champions!');
   }
+});
+
+bot.hears(/\/deleterubbish (.+)/, async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  const rubbishThrower = ctx.match[1].trim();
+
+  try {
+    const rubbishRecord = await RubbishRecordModel.findOne({ chatId });
+    if (!rubbishRecord?.options.includes(rubbishThrower)) {
+      ctx.reply('No such rubbish thrower exist!');
+      return;
+    }
+    rubbishRecord.options = rubbishRecord.options.filter(
+      (thrower: string) => thrower !== rubbishThrower,
+    );
+    await rubbishRecord.save();
+    ctx.reply('Rubbish thrower deleted!');
+  } catch (err) {
+    console.error(`Failed to delete rubbish thrower for chat ${chatId}. ` + err.message);
+    ctx.reply('Failed to delete rubbish thrower...Sorry!');
+  }
+});
+
+bot.command('deleterubbish', (ctx) => {
+  ctx.reply(
+    'Delete a rubbish thrower by using the following command \n' +
+      '/deleterubbish {rubbish thrower} \n' +
+      'e.g. /deleterubbish doggo man',
+  );
 });
 
 bot.command('clearrubbish', async (ctx) => {
