@@ -1,0 +1,1 @@
+export const MAX_RUBBISH_OPTION_LENGTH = 64;
