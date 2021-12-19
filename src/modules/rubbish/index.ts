@@ -68,6 +68,26 @@ bot.command('addrubbish', (ctx) => {
   );
 });
 
+bot.command('listrubbish', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  try {
+    const rubbishRecord = await RubbishRecordModel.findOne({ chatId });
+    if (!rubbishRecord || rubbishRecord.options.length === 0) {
+      ctx.reply('Add a rubbish thrower with /addrubbish command first!');
+      return;
+    }
+
+    let response = 'Current rubbish champions\n';
+    rubbishRecord.options.forEach((thrower: string, index: number) => {
+      response += `${index + 1}. ${thrower}\n`;
+    });
+    ctx.reply(response);
+  } catch (err) {
+    console.error(`Failed to list rubbish throwers for chat ${chatId}. ` + err.message);
+    ctx.reply('Sorry! Family bot failed to retrieve list of rubbish champions!');
+  }
+});
+
 bot.command('clearrubbish', async (ctx) => {
   const chatId = ctx.message.chat.id;
   try {
