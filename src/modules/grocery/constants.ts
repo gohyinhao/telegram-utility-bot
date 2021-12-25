@@ -1,0 +1,1 @@
+export const MAX_GROCERY_ITEM_LENGTH = 64;

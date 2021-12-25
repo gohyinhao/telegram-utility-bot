@@ -14,6 +14,7 @@ bot.help((ctx) => {
       '3. Boba-related help. /boba\n' +
       '4. Food-related help /food\n' +
       '5. Rubbish-related help /rubbish\n' +
+      '6. Grocery-related help /grocery\n' +
       '\nTo hear about upcoming features, /futurefeatures',
   );
 });
@@ -23,7 +24,6 @@ bot.command('futurefeatures', (ctx) => {
     'List of upcoming features planned!\n' +
       '- Weather forecast function\n' +
       '- Map function, maybe\n' +
-      '- Bus waiting time function, maybe\n' +
-      '- Grocery list function\n',
+      '- Bus waiting time function, maybe\n',
   );
 });
