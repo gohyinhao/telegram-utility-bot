@@ -6,3 +6,4 @@ import './grocery';
 import './helper';
 import './reminder';
 import './rubbish';
+import './weather';
