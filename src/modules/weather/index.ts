@@ -1,9 +1,13 @@
 import bot from '../../bot';
 import { formatTime } from '../../utils';
-import { get24HrWeatherForecast } from './api';
+import { get24HrWeatherForecast, getRainAreaImage } from './api';
 
 bot.command('weather', (ctx) => {
-  ctx.reply('What would you like to do?\n' + '1. Check weather forecast /checkweather\n');
+  ctx.reply(
+    'What would you like to do?\n' +
+      '1. Check weather forecast /checkweather\n' +
+      '2. Check rain area forecast /checkrain\n',
+  );
 });
 
 bot.command('checkweather', async (ctx) => {
@@ -28,5 +32,18 @@ bot.command('checkweather', async (ctx) => {
   } catch (err) {
     console.error('Failed to retrieve 24hr weather forecast. ' + err.message);
     ctx.reply('Failed to get weather forecast...');
+  }
+});
+
+bot.command('checkrain', async (ctx) => {
+  try {
+    const { image, timestamp } = await getRainAreaImage();
+    ctx.replyWithPhoto(
+      { source: image },
+      { caption: `Latest rain areas as at ${formatTime(timestamp)}` },
+    );
+  } catch (err) {
+    console.error('Failed to retrieve rain area forecast. ' + err.message);
+    ctx.reply('Failed to get rain area forecast...');
   }
 });
