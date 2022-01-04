@@ -11,6 +11,7 @@ bot.command('weather', (ctx) => {
 });
 
 bot.command('checkweather', async (ctx) => {
+  ctx.replyWithChatAction('typing');
   try {
     const result = await get24HrWeatherForecast();
 
@@ -36,6 +37,7 @@ bot.command('checkweather', async (ctx) => {
 });
 
 bot.command('checkrain', async (ctx) => {
+  ctx.replyWithChatAction('upload_photo');
   try {
     const { image, timestamp } = await getRainAreaImage();
     ctx.replyWithPhoto(
