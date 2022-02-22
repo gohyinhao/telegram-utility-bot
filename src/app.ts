@@ -16,4 +16,5 @@ import './modules';
 /**
  * ON LAUNCH LOGIC
  */
+import './modules/bus/onLaunch';
 import './modules/reminder/onLaunch';
