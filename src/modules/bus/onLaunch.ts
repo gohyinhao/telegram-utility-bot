@@ -8,7 +8,7 @@ const refreshBusStopInfoInDb = async () => {
     const busStopInfo = await getAllBusStopInfo();
     console.log('Finished fetching bus stop info!');
     console.log('Deleting all existing bus stop records...');
-    BusStopModel.deleteMany({});
+    await BusStopModel.deleteMany({});
     console.log('Finished deleting all existing bus stop records!');
     console.log('Inserting new bus stop info into db...');
     BusStopModel.insertMany(busStopInfo, undefined, function (err) {
