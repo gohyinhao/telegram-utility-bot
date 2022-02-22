@@ -16,6 +16,7 @@ bot.help((ctx) => {
       '5. Rubbish-related help /rubbish\n' +
       '6. Grocery-related help /grocery\n' +
       '7. Weather-related help /weather\n' +
+      '8. Bus-related help /bus\n' +
       '\nTo hear about upcoming features, /futurefeatures',
   );
 });
@@ -24,6 +25,6 @@ bot.command('futurefeatures', (ctx) => {
   ctx.reply(
     'List of upcoming features planned!\n' +
       '- Map function, maybe\n' +
-      '- Bus waiting time function, maybe\n',
+      '- MRT waiting time function, maybe\n',
   );
 });

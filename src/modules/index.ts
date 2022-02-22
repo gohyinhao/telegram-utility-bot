@@ -1,4 +1,5 @@
 import './boba';
+import './bus';
 import './callbackQuery';
 import './car';
 import './food';
