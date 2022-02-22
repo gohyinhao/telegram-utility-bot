@@ -1,6 +1,7 @@
 import bot from '../../bot';
 import { getBusArrivalInfo } from './api';
 import BusStopModel from './models/busStop';
+import { BusArrivalInfo } from './types';
 import { formatBusArrivalInfosForDisplay } from './utils';
 
 bot.command('bus', (ctx) => {
@@ -12,9 +13,10 @@ bot.command('bus', (ctx) => {
 /**
  * BUS ARRIVAL RELATED COMMANDS
  */
-bot.hears(/\/checkbus (\d+)/, async (ctx) => {
+bot.hears(/\/checkbus (\d+)(?:|\s+(\d+\w?))$/, async (ctx) => {
   const chatId = ctx.message.chat.id;
   const busStopCode = ctx.match[1].trim();
+  const busServiceNum = ctx.match[2]?.trim();
 
   try {
     const busStopInfo = await BusStopModel.findOne({ BusStopCode: busStopCode });
@@ -22,10 +24,21 @@ bot.hears(/\/checkbus (\d+)/, async (ctx) => {
       ctx.reply('Invalid bus stop code!!!');
       return;
     }
-    const busArrivalInfo = await getBusArrivalInfo(busStopCode);
+    let busArrivalInfo = await getBusArrivalInfo(busStopCode);
     if (busArrivalInfo.length === 0) {
       ctx.reply('Damn...you missed the last bus, better luck next time!');
       return;
+    }
+    if (busServiceNum !== undefined) {
+      const busServiceArrivalInfo = busArrivalInfo.find((info: BusArrivalInfo) =>
+        info.ServiceNo.localeCompare(busServiceNum, undefined, { sensitivity: 'base' }),
+      );
+      if (!busServiceArrivalInfo) {
+        ctx.reply(`No info on ${busServiceNum} for this bus stop!`);
+        return;
+      } else {
+        busArrivalInfo = [busServiceArrivalInfo];
+      }
     }
     ctx.reply(formatBusArrivalInfosForDisplay(busStopCode, busArrivalInfo, busStopInfo));
   } catch (err) {
