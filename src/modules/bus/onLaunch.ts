@@ -1,5 +1,6 @@
 import { getAllBusStopInfo } from './api';
 import BusStopModel from './models/busStop';
+import schedule from '../../scheduler';
 
 const refreshBusStopInfoInDb = async () => {
   try {
@@ -8,7 +9,7 @@ const refreshBusStopInfoInDb = async () => {
     console.log('Finished fetching bus stop info!');
     console.log('Deleting all existing bus stop records...');
     BusStopModel.deleteMany({});
-    console.log('Finished deleting all existing bus stop records.');
+    console.log('Finished deleting all existing bus stop records!');
     console.log('Inserting new bus stop info into db...');
     BusStopModel.insertMany(busStopInfo, undefined, function (err) {
       if (err) {
@@ -23,6 +24,10 @@ const refreshBusStopInfoInDb = async () => {
 
 const runOnLaunch = async () => {
   await refreshBusStopInfoInDb();
+  // refresh bus stop info every monday, 12 noon
+  schedule.scheduleJob('0 12 * * 1', async function () {
+    await refreshBusStopInfoInDb();
+  });
 };
 
 runOnLaunch();
