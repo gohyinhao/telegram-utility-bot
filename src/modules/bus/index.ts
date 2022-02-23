@@ -47,9 +47,12 @@ bot.hears(/\/checkbus (.+)/, async (ctx) => {
 
 bot.command('checkbus', (ctx) => {
   ctx.reply(
-    'Check bus arrival timing by using the following format \n' +
-      '/checkbus {bus stop number} {bus number (optional)} \n' +
+    'Check bus arrival timing by using one of following formats \n\n' +
+      '1. /checkbus {bus stop number} {bus number (optional)} \n' +
       'e.g. /checkbus 53049\n' +
-      'e.g. /checkbus 53049 162',
+      'e.g. /checkbus 53049 162\n\n' +
+      '2. /checkbus {street / bus stop name}\n' +
+      'e.g. /checkbus keppel road\n' +
+      'e.g. /checkbus opp outram park stn\n',
   );
 });
