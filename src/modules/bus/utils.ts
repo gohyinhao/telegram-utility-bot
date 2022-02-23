@@ -6,7 +6,7 @@ export const getBusArrivalInMin = (info?: BusInfo): string | undefined => {
   }
   const msToArrival = new Date(info.EstimatedArrival).valueOf() - Date.now();
   const minToArrival = Math.floor(msToArrival / 1000 / 60);
-  return minToArrival === 0 ? 'Arr' : `${minToArrival}min`;
+  return minToArrival <= 0 ? 'Arr' : `${minToArrival}min`;
 };
 
 export const formatBusArrivalInfoForDisplay = (info: BusArrivalInfo): string => {
