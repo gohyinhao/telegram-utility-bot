@@ -4,6 +4,10 @@ import bot from '../../bot';
 import { DataType } from '../../types';
 import { parseCallbackData } from '../../utils/index';
 import { handleAddFaveBobaDrinkCallbackQuery } from '../boba/callbackQuery';
+import {
+  handleBusStopSearchCbQuery,
+  handleBusStopSearchPaginateCbQuery,
+} from '../bus/callbackQuery';
 import { handleParkingInfoCallbackQuery } from '../car';
 import { handleAddFaveFoodOrderCallbackQuery } from '../food/callbackQuery';
 import {
@@ -33,6 +37,12 @@ bot.on('callback_query', async (ctx) => {
       break;
     case DataType.FOOD_STORE:
       await handleAddFaveFoodOrderCallbackQuery(ctx, chatId, userId, ...(args as [string, string]));
+      break;
+    case DataType.BUS_STOP_SEARCH_PAGINATE:
+      await handleBusStopSearchPaginateCbQuery(ctx, chatId, args[0] as string, Number(args[1]));
+      break;
+    case DataType.BUS_STOP_SEARCH:
+      await handleBusStopSearchCbQuery(ctx, chatId, ...(args as [string, string]));
       break;
   }
 

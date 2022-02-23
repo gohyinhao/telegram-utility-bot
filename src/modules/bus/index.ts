@@ -1,7 +1,11 @@
+import { setItemInCache } from '../../utils';
 import bot from '../../bot';
-import { getBusArrivalInfo } from './api';
-import BusStopModel from './models/busStop';
-import { formatBusArrivalInfosForDisplay } from './utils';
+import {
+  BUS_STOP_CACHE_DURATION_IN_SEC,
+  getBusStopMarkupList,
+  replyWithBusArrivalInfo,
+  searchBusStops,
+} from './utils';
 
 bot.command('bus', (ctx) => {
   ctx.reply(
@@ -17,21 +21,26 @@ bot.hears(/\/checkbus (\d+)(?:|\s+(\d+\w?))$/, async (ctx) => {
   const chatId = ctx.message.chat.id;
   const busStopCode = ctx.match[1].trim();
   const busServiceNum = ctx.match[2]?.trim();
+  await replyWithBusArrivalInfo(ctx, chatId, busStopCode, busServiceNum);
+});
 
+bot.hears(/\/checkbus (.+)/, async (ctx) => {
+  ctx.replyWithChatAction('typing');
+  const chatId = ctx.message.chat.id;
+  const messageId = ctx.message.message_id;
+  const searchString = ctx.match[1].trim();
   try {
-    const busStopInfo = await BusStopModel.findOne({ BusStopCode: busStopCode });
-    if (!busStopInfo) {
-      ctx.reply('Invalid bus stop code!!!');
-      return;
-    }
-    const busArrivalInfo = await getBusArrivalInfo(busStopCode, busServiceNum);
-    if (busArrivalInfo.length === 0) {
-      ctx.reply('No bus info available!!!');
-      return;
-    }
-    ctx.reply(formatBusArrivalInfosForDisplay(busStopCode, busArrivalInfo, busStopInfo));
+    const busStops = await searchBusStops(searchString);
+    setItemInCache(chatId, messageId, JSON.stringify(busStops), BUS_STOP_CACHE_DURATION_IN_SEC);
+    ctx.reply('Are you looking for any of these bus stops?', {
+      reply_markup: {
+        inline_keyboard: getBusStopMarkupList(busStops, 0, messageId),
+      },
+    });
   } catch (err) {
-    console.error(`Failed to get bus arrival info for chat ${chatId}. ` + err.message);
+    console.error(
+      `Failed to search bus stop and get bus arrival info for chat ${chatId}. ` + err.message,
+    );
     ctx.reply('Family bot error! Sorry!');
   }
 });

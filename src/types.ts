@@ -9,4 +9,6 @@ export enum DataType {
   REMINDER_FREQ = 'reminder-freq',
   BOBA_STORE = 'boba-store',
   FOOD_STORE = 'food-store',
+  BUS_STOP_SEARCH = 'bus-stop-search',
+  BUS_STOP_SEARCH_PAGINATE = 'bus-stop-paginate',
 }

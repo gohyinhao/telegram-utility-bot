@@ -7,7 +7,7 @@ export const encodeCacheKey = (chatId: number | string, messageId: number | stri
 export const setItemInCache = (
   chatId: number | string,
   messageId: number | string,
-  value: any,
+  value: string,
   expiryTimeInSec = 600,
 ) => {
   redis.set(encodeCacheKey(chatId, messageId), value, 'EX', expiryTimeInSec);
