@@ -1,7 +1,6 @@
 import bot from '../../bot';
 import { getBusArrivalInfo } from './api';
 import BusStopModel from './models/busStop';
-import { BusArrivalInfo } from './types';
 import { formatBusArrivalInfosForDisplay } from './utils';
 
 bot.command('bus', (ctx) => {
@@ -24,21 +23,10 @@ bot.hears(/\/checkbus (\d+)(?:|\s+(\d+\w?))$/, async (ctx) => {
       ctx.reply('Invalid bus stop code!!!');
       return;
     }
-    let busArrivalInfo = await getBusArrivalInfo(busStopCode);
+    const busArrivalInfo = await getBusArrivalInfo(busStopCode, busServiceNum);
     if (busArrivalInfo.length === 0) {
-      ctx.reply('Damn...you missed the last bus, better luck next time!');
+      ctx.reply('No bus info available!!!');
       return;
-    }
-    if (busServiceNum !== undefined) {
-      const busServiceArrivalInfo = busArrivalInfo.find((info: BusArrivalInfo) =>
-        info.ServiceNo.localeCompare(busServiceNum, undefined, { sensitivity: 'base' }),
-      );
-      if (!busServiceArrivalInfo) {
-        ctx.reply(`No info on ${busServiceNum} for this bus stop!`);
-        return;
-      } else {
-        busArrivalInfo = [busServiceArrivalInfo];
-      }
     }
     ctx.reply(formatBusArrivalInfosForDisplay(busStopCode, busArrivalInfo, busStopInfo));
   } catch (err) {
