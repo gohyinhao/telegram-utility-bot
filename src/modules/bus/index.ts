@@ -13,6 +13,7 @@ bot.command('bus', (ctx) => {
  * BUS ARRIVAL RELATED COMMANDS
  */
 bot.hears(/\/checkbus (\d+)(?:|\s+(\d+\w?))$/, async (ctx) => {
+  ctx.replyWithChatAction('typing');
   const chatId = ctx.message.chat.id;
   const busStopCode = ctx.match[1].trim();
   const busServiceNum = ctx.match[2]?.trim();
