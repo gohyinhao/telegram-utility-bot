@@ -33,6 +33,17 @@ export const getRainAreaData = async (): Promise<RainAreaData | undefined> => {
   return data.pop();
 };
 
+export const get240kmRainAreaData = async (): Promise<RainAreaData | undefined> => {
+  const response = await fetch(`${NEA_DOMAIN}/api/RainArea/GetRecentData240/${Date.now() / 1000}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to retrieve 240km rain area data');
+  }
+
+  const data: RainAreaData[] = await response.json();
+  return data.pop();
+};
+
 export const getRainAreaOverlayImage = async (url: string) => {
   const response = await fetch(url);
 
@@ -43,19 +54,14 @@ export const getRainAreaOverlayImage = async (url: string) => {
   return response.buffer();
 };
 
-const RAIN_AREA_IMAGE_WIDTH = 850;
-const RAIN_AREA_IMAGE_HEIGHT = 475;
-
-export const getRainAreaImage = async () => {
-  const rainAreaData: RainAreaData | undefined = await getRainAreaData();
-  if (!rainAreaData) {
-    throw new Error('No rain area data available');
-  }
-  const timestamp = new Date(rainAreaData.SortingTime).valueOf();
-
-  const rainAreaOverlay = await getRainAreaOverlayImage(`${NEA_DOMAIN}${rainAreaData.Url}`);
+const processRainAreaImage = async (
+  baseImgPath: string,
+  rainAreaOverlay: Buffer,
+  imgWidth: number,
+  imgHeight: number,
+): Promise<Buffer> => {
   const rainAreaOverlayBuffer = await sharp(rainAreaOverlay)
-    .resize(RAIN_AREA_IMAGE_WIDTH, RAIN_AREA_IMAGE_HEIGHT)
+    .resize(imgWidth, imgHeight)
     .composite([
       {
         input: Buffer.from([255, 255, 255, 128]),
@@ -70,12 +76,52 @@ export const getRainAreaImage = async () => {
     ])
     .toBuffer();
 
-  const image = await sharp('src/assets/base-sg-weather-map.png')
-    .resize(RAIN_AREA_IMAGE_WIDTH, RAIN_AREA_IMAGE_HEIGHT)
+  const image = await sharp(baseImgPath)
+    .resize(imgWidth, imgHeight)
     .composite([{ input: rainAreaOverlayBuffer }])
     .sharpen()
     .png()
     .toBuffer();
 
+  return image;
+};
+
+const RAIN_AREA_IMAGE_WIDTH = 850;
+const RAIN_AREA_IMAGE_HEIGHT = 475;
+
+export const getRainAreaImage = async () => {
+  const rainAreaData: RainAreaData | undefined = await getRainAreaData();
+  if (!rainAreaData) {
+    throw new Error('No rain area data available');
+  }
+  const timestamp = new Date(rainAreaData.SortingTime).valueOf();
+
+  const rainAreaOverlay = await getRainAreaOverlayImage(`${NEA_DOMAIN}${rainAreaData.Url}`);
+  const image = await processRainAreaImage(
+    'src/assets/base-sg-weather-map.png',
+    rainAreaOverlay,
+    RAIN_AREA_IMAGE_WIDTH,
+    RAIN_AREA_IMAGE_HEIGHT,
+  );
+  return { image, timestamp };
+};
+
+const RAIN_AREA_240KM_IMAGE_WIDTH = 850;
+const RAIN_AREA_240KM_IMAGE_HEIGHT = 850;
+
+export const get240kmRainAreaImage = async () => {
+  const rainAreaData: RainAreaData | undefined = await get240kmRainAreaData();
+  if (!rainAreaData) {
+    throw new Error('No 240km rain area data available');
+  }
+  const timestamp = new Date(rainAreaData.SortingTime).valueOf();
+
+  const rainAreaOverlay = await getRainAreaOverlayImage(`${NEA_DOMAIN}${rainAreaData.Url}`);
+  const image = await processRainAreaImage(
+    'src/assets/base-sg-240km-weather-map.jpg',
+    rainAreaOverlay,
+    RAIN_AREA_240KM_IMAGE_WIDTH,
+    RAIN_AREA_240KM_IMAGE_HEIGHT,
+  );
   return { image, timestamp };
 };

@@ -1,12 +1,13 @@
 import bot from '../../bot';
 import { formatTime } from '../../utils';
-import { get24HrWeatherForecast, getRainAreaImage } from './api';
+import { get24HrWeatherForecast, getRainAreaImage, get240kmRainAreaImage } from './api';
 
 bot.command('weather', (ctx) => {
   ctx.reply(
     'What would you like to do?\n' +
       '1. Check weather forecast /checkweather\n' +
-      '2. Check rain area forecast /checkrain\n',
+      '2. Check rain area forecast /checkrain\n' +
+      '3. Check 240km range rain area forecast /checkrain240\n',
   );
 });
 
@@ -47,5 +48,19 @@ bot.command('checkrain', async (ctx) => {
   } catch (err) {
     console.error('Failed to retrieve rain area forecast. ' + err.message);
     ctx.reply('Failed to get rain area forecast...');
+  }
+});
+
+bot.command('checkrain240', async (ctx) => {
+  ctx.replyWithChatAction('upload_photo');
+  try {
+    const { image, timestamp } = await get240kmRainAreaImage();
+    ctx.replyWithPhoto(
+      { source: image },
+      { caption: `Latest 240km range rain areas as at ${formatTime(timestamp)}` },
+    );
+  } catch (err) {
+    console.error('Failed to retrieve 240km rain area forecast. ' + err.message);
+    ctx.reply('Failed to get 240km range rain area forecast...');
   }
 });
