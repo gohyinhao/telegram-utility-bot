@@ -31,6 +31,10 @@ bot.hears(/\/checkbus (.+)/, async (ctx) => {
   const searchString = ctx.match[1].trim();
   try {
     const busStops = await searchBusStops(searchString);
+    if (busStops.length === 0) {
+      ctx.reply("Can't find the bus stop you are looking for! Try double checking your spelling!");
+      return;
+    }
     setItemInCache(chatId, messageId, JSON.stringify(busStops), BUS_STOP_CACHE_DURATION_IN_SEC);
     ctx.reply('Are you looking for any of these bus stops?', {
       reply_markup: {
