@@ -131,7 +131,7 @@ export const getBusStopMarkupList = (
     .map((info: BusStop) => [
       {
         text: `${info.RoadName}, ${info.Description} (${info.BusStopCode})`,
-        callback_data: encodeCallbackData(busStopCallbackDataType, messageId, info.BusStopCode),
+        callback_data: encodeCallbackData(busStopCallbackDataType, info.BusStopCode, messageId),
       },
     ])
     .concat(

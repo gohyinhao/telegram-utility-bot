@@ -32,19 +32,21 @@ export const handleBusStopSearchPaginateCbQuery = async (
 export const handleBusStopSearchCbQuery = async (
   ctx: Context,
   chatId: string,
-  messageId: string,
   busStopCode: string,
+  messageId?: string,
 ) => {
   await replyWithBusArrivalInfo(ctx, chatId, busStopCode);
-  deleteItemFromCache(chatId, messageId);
+  if (messageId !== undefined) {
+    deleteItemFromCache(chatId, messageId);
+  }
 };
 
 export const handleAddFaveBusStopCbQuery = async (
   ctx: Context,
   chatId: string,
   userId: number,
-  messageId: string,
   busStopCode: string,
+  messageId: string,
 ) => {
   await addNewFaveBusStopToConfig(ctx, userId, busStopCode);
   deleteItemFromCache(chatId, messageId);
