@@ -49,7 +49,7 @@ bot.on('callback_query', async (ctx) => {
       );
       break;
     case DataType.BUS_STOP_SEARCH:
-      await handleBusStopSearchCbQuery(ctx, chatId, ...(args as [string, string]));
+      await handleBusStopSearchCbQuery(ctx, chatId, ...(args as [string, string | undefined]));
       break;
     case DataType.ADD_FAVE_BUS_STOP:
       await handleAddFaveBusStopCbQuery(ctx, chatId, userId, ...(args as [string, string]));

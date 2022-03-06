@@ -4,16 +4,19 @@ import {
   addNewFaveBusStopToConfig,
   BUS_STOP_CACHE_DURATION_IN_SEC,
   getBusStopMarkupList,
+  getFaveBusStopMarkupList,
   replyWithBusArrivalInfo,
   searchBusStops,
 } from './utils';
 import { DataType } from '../../types';
+import UserBusConfigModel from './models/userBusConfig';
 
 bot.command('bus', (ctx) => {
   ctx.reply(
     'What would you like to do?\n' +
       '\nGeneral\n' +
       '1. Check bus arrival timing /checkbus\n' +
+      '2. Check bus arrival timing at fave bus stop /checkfavebusstop\n' +
       '\nFavourite Bus Stop Management\n' +
       '1. Add new fave bus stop /addfavebusstop\n',
   );
@@ -65,6 +68,35 @@ bot.command('checkbus', (ctx) => {
       'e.g. /checkbus keppel road\n' +
       'e.g. /checkbus opp outram park stn\n',
   );
+});
+
+bot.command('checkfavebusstop', async (ctx) => {
+  ctx.replyWithChatAction('typing');
+  const chatId = ctx.message.chat.id;
+  const userId = ctx.message.from.id;
+  try {
+    const userBusConfig = await UserBusConfigModel.findOne({ userId })
+      .populate('faveBusStops')
+      .exec();
+
+    if (!userBusConfig || userBusConfig.faveBusStopCodes.length === 0) {
+      ctx.reply('You have no favourite bus stops! Add one first using /addfavebusstop command!');
+      return;
+    } else if (userBusConfig.faveBusStopCodes.length === 1) {
+      await replyWithBusArrivalInfo(ctx, chatId, userBusConfig.faveBusStopCodes[0]);
+      return;
+    }
+    ctx.reply('Which bus stops are you looking for?', {
+      reply_markup: {
+        inline_keyboard: getFaveBusStopMarkupList(userBusConfig.faveBusStops ?? []),
+      },
+    });
+  } catch (err) {
+    console.error(
+      `Failed to search bus stop and get bus arrival info for chat ${chatId}. ` + err.message,
+    );
+    ctx.reply('Family bot error! Sorry!');
+  }
 });
 
 /**

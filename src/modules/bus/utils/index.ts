@@ -119,7 +119,6 @@ export const searchBusStops = async (str: string): Promise<BusStop[]> => {
   return busStops;
 };
 
-// userId is optional only if you need it to be encoded in callback data
 export const getBusStopMarkupList = (
   busStopCallbackDataType: DataType,
   busStops: BusStop[],

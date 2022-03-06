@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongoose';
+
 export enum BusOperator {
   SBS = 'SBST',
   SMRT = 'SMRT',
@@ -18,6 +20,7 @@ export enum BusType {
 }
 
 export interface BusStop {
+  _id: ObjectId;
   BusStopCode: string;
   RoadName: string;
   Description: string;
@@ -47,5 +50,6 @@ export interface BusArrivalInfo {
 
 export interface UserBusConfig {
   userId: number;
-  faveBusStopIds: string[];
+  faveBusStopCodes: string[];
+  faveBusStops?: BusStop[];
 }
