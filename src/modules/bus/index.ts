@@ -164,11 +164,34 @@ bot.command('listfavebusstop', async (ctx) => {
       return;
     }
     userBusConfig.faveBusStops.forEach((busStop: BusStop, index: number) => {
-      response += `${index + 1}. ${formatFaveBusStopForDisplay(busStop, false)}\n`;
+      response += `${index + 1}. ${formatFaveBusStopForDisplay(busStop, true)}\n`;
     });
     ctx.reply(response);
   } catch (err) {
     console.error(`Failed to retrieve fave bus stop list for user ${userId}. ` + err.message);
     ctx.reply('Failed to list your favourite bus stops. Family Bot is sorry!');
+  }
+});
+
+bot.hears(/\/deletefavebusstop(\d+)$/, async (ctx) => {
+  ctx.replyWithChatAction('typing');
+  const userId = ctx.message.from.id;
+  const busStopCode = ctx.match[1];
+  try {
+    const userBusConfig = await UserBusConfigModel.findOne({ userId }).exec();
+    if (!userBusConfig || !userBusConfig.faveBusStopCodes.includes(busStopCode)) {
+      ctx.reply(
+        'Invalid command! Either invalid bus stop number or you do not have that bus stop as your favourite!',
+      );
+      return;
+    }
+    userBusConfig.faveBusStopCodes = userBusConfig.faveBusStopCodes.filter(
+      (code: string) => code !== busStopCode,
+    );
+    await userBusConfig.save();
+    ctx.reply('Bus stop successfully deleted from your favourites!');
+  } catch (err) {
+    console.error(`Error while deleting fave bus stop for user ${userId}. ` + err.message);
+    ctx.reply('Failed to delete bus stop from your favourites! Sorry!');
   }
 });
