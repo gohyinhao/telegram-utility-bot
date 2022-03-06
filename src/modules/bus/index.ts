@@ -6,6 +6,7 @@ import {
   formatFaveBusStopForDisplay,
   getBusStopMarkupList,
   getFaveBusStopMarkupList,
+  MAX_NUM_FAVE_BUS_STOP,
   replyWithBusArrivalInfo,
   searchBusStops,
 } from './utils';
@@ -19,9 +20,21 @@ bot.command('bus', (ctx) => {
       '\nGeneral\n' +
       '1. Check bus arrival timing /checkbus\n' +
       '2. Check bus arrival timing at fave bus stop /checkfavebusstop\n' +
+      '3. I need more detailed help with bus functions /bushelp\n' +
       '\nFavourite Bus Stop Management\n' +
       '1. Add new fave bus stop /addfavebusstop\n' +
       '2. List fave bus stops /listfavebusstop\n',
+  );
+});
+
+bot.command('bushelp', (ctx) => {
+  ctx.reply(
+    'Let Family Bot explain how the bus function works!\n' +
+      '\nThe main function is to get estimates for bus arrival timings using the /checkbus command. You can get this info by either using the bus stop number or searching the name of the bus stop or the name of the road the bus stop is on.\n' +
+      '\nNote that the timings are estimates given by LTA. Family bot has no control over these estimates!\n' +
+      `\nTo make it easier to check the bus stops you want, Family Bot is able to store a list of your favourites, up to a cap of ${MAX_NUM_FAVE_BUS_STOP}! To add a bus stop to this list, you can use the /addfavebusstop command.\n` +
+      '\nOnce you have at least 1 bus stop under this list, to quickly check the bus arrival timings, you can use the /checkfavebusstop command!\n' +
+      '\nTo delete a bus stop from this list, do check out the /listfavebusstop command, then click the delete command that appears!\n',
   );
 });
 
