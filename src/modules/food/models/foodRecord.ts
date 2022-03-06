@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { MAX_FAVE_ORDER_LENGTH, MAX_FOOD_STORE_LENGTH } from '../constants';
 import { FoodRecord } from '../types';
 
-const foodRecordSchema = new mongoose.Schema(
+const FoodRecordSchema = new mongoose.Schema(
   {
     chatId: {
       type: Number,
@@ -32,6 +32,6 @@ const foodRecordSchema = new mongoose.Schema(
   },
 );
 
-const FoodRecordModel = mongoose.model<FoodRecord>('FoodRecord', foodRecordSchema);
+const FoodRecordModel = mongoose.model<FoodRecord>('FoodRecord', FoodRecordSchema);
 
 export default FoodRecordModel;

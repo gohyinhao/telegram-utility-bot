@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { MAX_REMINDER_TEXT_LENGTH } from '../constants';
 import { Reminder, ReminderFrequency, ReminderType } from '../types';
 
-const reminderSchema = new mongoose.Schema(
+const ReminderSchema = new mongoose.Schema(
   {
     chatId: {
       type: Number,
@@ -42,4 +42,4 @@ const reminderSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model<Reminder>('Reminder', reminderSchema);
+export default mongoose.model<Reminder>('Reminder', ReminderSchema);

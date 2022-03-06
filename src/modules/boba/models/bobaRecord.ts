@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { MAX_BOBA_FAVE_LENGTH, MAX_BOBA_STORE_LENGTH } from '../constants';
 import { BobaRecord } from '../types';
 
-const bobaRecordSchema = new mongoose.Schema(
+const BobaRecordSchema = new mongoose.Schema(
   {
     chatId: {
       type: Number,
@@ -32,6 +32,6 @@ const bobaRecordSchema = new mongoose.Schema(
   },
 );
 
-const BobaRecordModel = mongoose.model<BobaRecord>('BobaRecord', bobaRecordSchema);
+const BobaRecordModel = mongoose.model<BobaRecord>('BobaRecord', BobaRecordSchema);
 
 export default BobaRecordModel;

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { BusStop } from '../types';
 
-const busStopSchema = new mongoose.Schema({
+const BusStopSchema = new mongoose.Schema({
   BusStopCode: {
     type: String,
     required: true,
@@ -25,6 +25,6 @@ const busStopSchema = new mongoose.Schema({
   },
 });
 
-const BusStopModel = mongoose.model<BusStop>('BusStop', busStopSchema);
+const BusStopModel = mongoose.model<BusStop>('BusStop', BusStopSchema);
 
 export default BusStopModel;

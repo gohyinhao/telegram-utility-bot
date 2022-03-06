@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { MAX_GROCERY_ITEM_LENGTH } from '../constants';
 import { GroceryList } from '../types';
 
-const groceryListSchema = new mongoose.Schema(
+const GroceryListSchema = new mongoose.Schema(
   {
     chatId: {
       type: Number,
@@ -24,6 +24,6 @@ const groceryListSchema = new mongoose.Schema(
   },
 );
 
-const GroceryListModel = mongoose.model<GroceryList>('GroceryList', groceryListSchema);
+const GroceryListModel = mongoose.model<GroceryList>('GroceryList', GroceryListSchema);
 
 export default GroceryListModel;

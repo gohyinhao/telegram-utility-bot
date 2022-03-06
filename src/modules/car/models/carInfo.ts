@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { CarInfo, parkingLocations } from '../types';
 
-const carInfoSchema = new mongoose.Schema(
+const CarInfoSchema = new mongoose.Schema(
   {
     chatId: {
       type: Number,
@@ -18,4 +18,4 @@ const carInfoSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model<CarInfo>('CarInfo', carInfoSchema);
+export default mongoose.model<CarInfo>('CarInfo', CarInfoSchema);

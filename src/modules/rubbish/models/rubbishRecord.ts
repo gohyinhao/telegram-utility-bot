@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { MAX_RUBBISH_OPTION_LENGTH } from '../constants';
 import { RubbishRecord } from '../types';
 
-const rubbishRecordSchema = new mongoose.Schema(
+const RubbishRecordSchema = new mongoose.Schema(
   {
     chatId: {
       type: Number,
@@ -24,6 +24,6 @@ const rubbishRecordSchema = new mongoose.Schema(
   },
 );
 
-const RubbishRecordModel = mongoose.model<RubbishRecord>('RubbishRecord', rubbishRecordSchema);
+const RubbishRecordModel = mongoose.model<RubbishRecord>('RubbishRecord', RubbishRecordSchema);
 
 export default RubbishRecordModel;
