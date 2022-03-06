@@ -71,3 +71,11 @@ export const getFaveBusStopMarkupList = (busStops: BusStop[]) => {
     },
   ]);
 };
+
+export const formatFaveBusStopForDisplay = (busStop: BusStop, addDeleteCommand = false): string => {
+  let result = formatBusStopInfoForDisplay(busStop);
+  if (addDeleteCommand) {
+    result += ` /deletefavebusstop${busStop.BusStopCode}`;
+  }
+  return result;
+};
