@@ -32,7 +32,7 @@ bot.command('bushelp', (ctx) => {
     'Let Family Bot explain how the bus function works!\n' +
       '\nThe main function is to get estimates for bus arrival timings using the /checkbus command. You can get this info by either using the bus stop number or searching the name of the bus stop or the name of the road the bus stop is on.\n' +
       '\nNote that the timings are estimates given by LTA. Family bot has no control over these estimates!\n' +
-      `\nTo make it easier to check the bus stops you want, Family Bot is able to store a list of your favourites, up to a cap of ${MAX_NUM_FAVE_BUS_STOP}! To add a bus stop to this list, you can use the /addfavebusstop command.\n` +
+      `\nTo make it easier to check the bus stops you want, Family Bot is able to store a list of your favourites, up to a cap of ${MAX_NUM_FAVE_BUS_STOP}! To add a bus stop to this list, you can use the /addfavebusstop command. Do note that this list is tagged to you as a user, not the chat! This means that if you go to another chat with Family Bot, both chats will have the same list!\n` +
       '\nOnce you have at least 1 bus stop under this list, to quickly check the bus arrival timings, you can use the /checkfavebusstop command!\n' +
       '\nTo delete a bus stop from this list, do check out the /listfavebusstop command, then click the delete command that appears!\n',
   );
