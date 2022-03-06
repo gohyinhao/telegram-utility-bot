@@ -44,3 +44,8 @@ export interface BusArrivalInfo {
   NextBus2?: BusInfo;
   NextBus3?: BusInfo;
 }
+
+export interface UserBusConfig {
+  userId: number;
+  faveBusStopIds: string[];
+}

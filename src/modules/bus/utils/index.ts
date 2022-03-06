@@ -1,9 +1,11 @@
 import { Context } from 'telegraf';
-import { DataType } from '../../types';
-import { encodeCallbackData } from '../../utils';
-import { getBusArrivalInfo } from './api';
-import BusStopModel from './models/busStop';
-import { BusInfo, BusArrivalInfo, BusStop } from './types';
+import { DataType } from '../../../types';
+import { encodeCallbackData } from '../../../utils';
+import { getBusArrivalInfo } from '../api';
+import BusStopModel from '../models/busStop';
+import { BusInfo, BusArrivalInfo, BusStop } from '../types';
+
+export * from './userBusConfig';
 
 export const getBusArrivalInMin = (info?: BusInfo): string | undefined => {
   if (!info || !info.EstimatedArrival) {
@@ -34,13 +36,17 @@ export const formatBusArrivalInfoForDisplay = (info: BusArrivalInfo): string => 
   return result;
 };
 
+export const formatBusStopInfoForDisplay = (busStopInfo: BusStop): string => {
+  return `Bus Stop ${busStopInfo.BusStopCode} - ${busStopInfo.RoadName}, ${busStopInfo.Description}`;
+};
+
 export const formatBusArrivalInfosForDisplay = (
   busStopCode: string,
   infos: BusArrivalInfo[],
   busStopInfo?: BusStop,
 ): string => {
-  let result = `Bus Stop ${busStopCode}${
-    busStopInfo ? ` - ${busStopInfo.RoadName}, ${busStopInfo.Description}` : ''
+  let result = `${
+    busStopInfo ? formatBusStopInfoForDisplay(busStopInfo) : `Bus Stop ${busStopCode}`
   }\n`;
   infos.forEach((info: BusArrivalInfo) => {
     result += formatBusArrivalInfoForDisplay(info) + '\n';

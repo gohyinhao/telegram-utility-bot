@@ -1,6 +1,7 @@
 import { setItemInCache } from '../../utils';
 import bot from '../../bot';
 import {
+  addNewFaveBusStopToConfig,
   BUS_STOP_CACHE_DURATION_IN_SEC,
   getBusStopMarkupList,
   replyWithBusArrivalInfo,
@@ -9,7 +10,11 @@ import {
 
 bot.command('bus', (ctx) => {
   ctx.reply(
-    'What would you like to do?\n' + '\nGeneral\n' + '1. Check bus arrival timing /checkbus\n',
+    'What would you like to do?\n' +
+      '\nGeneral\n' +
+      '1. Check bus arrival timing /checkbus\n' +
+      '\nFavourite Bus Stop Management\n' +
+      '1. Add new fave bus stop /addfavebusstop\n',
   );
 });
 
@@ -58,5 +63,26 @@ bot.command('checkbus', (ctx) => {
       '2. /checkbus {street / bus stop name}\n' +
       'e.g. /checkbus keppel road\n' +
       'e.g. /checkbus opp outram park stn\n',
+  );
+});
+
+/**
+ * FAVE BUS STOP RELATED COMMANDS
+ */
+bot.hears(/\/addfavebusstop (\d+)$/, async (ctx) => {
+  ctx.replyWithChatAction('typing');
+  const userId = ctx.message.from.id;
+  const busStopCode = ctx.match[1].trim();
+  await addNewFaveBusStopToConfig(ctx, userId, busStopCode);
+});
+
+bot.command('addfavebusstop', (ctx) => {
+  ctx.reply(
+    'Add a favourite bus stop by using one of following formats \n\n' +
+      '1. /addfavebusstop {bus stop number}\n' +
+      'e.g. /addfavebusstop 53049\n' +
+      '2. /addfavebusstop {street / bus stop name}\n' +
+      'e.g. /addfavebusstop keppel road\n' +
+      'e.g. /addfavebusstop opp outram park stn\n',
   );
 });
