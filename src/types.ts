@@ -10,5 +10,6 @@ export enum DataType {
   BOBA_STORE = 'boba-store',
   FOOD_STORE = 'food-store',
   BUS_STOP_SEARCH = 'bus-stop-search',
+  ADD_FAVE_BUS_STOP = 'add-fave-bus-stop',
   BUS_STOP_SEARCH_PAGINATE = 'bus-stop-paginate',
 }

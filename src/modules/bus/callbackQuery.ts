@@ -1,12 +1,14 @@
+import { DataType } from 'src/types';
 import { Context } from 'telegraf';
 import { deleteItemFromCache, getItemFromCache } from '../../utils';
-import { getBusStopMarkupList, replyWithBusArrivalInfo } from './utils';
+import { addNewFaveBusStopToConfig, getBusStopMarkupList, replyWithBusArrivalInfo } from './utils';
 
 export const handleBusStopSearchPaginateCbQuery = async (
   ctx: Context,
   chatId: string,
   messageId: string,
   offset: number,
+  busStopCallbackDataType: DataType,
 ) => {
   try {
     const busStopsJSON = await getItemFromCache(chatId, messageId);
@@ -17,7 +19,7 @@ export const handleBusStopSearchPaginateCbQuery = async (
     const busStops = JSON.parse(busStopsJSON);
     ctx.reply('Are you looking for any of these bus stops?', {
       reply_markup: {
-        inline_keyboard: getBusStopMarkupList(busStops, offset, messageId),
+        inline_keyboard: getBusStopMarkupList(busStopCallbackDataType, busStops, offset, messageId),
       },
     });
   } catch (err) {
@@ -34,5 +36,16 @@ export const handleBusStopSearchCbQuery = async (
   busStopCode: string,
 ) => {
   await replyWithBusArrivalInfo(ctx, chatId, busStopCode);
+  deleteItemFromCache(chatId, messageId);
+};
+
+export const handleAddFaveBusStopCbQuery = async (
+  ctx: Context,
+  chatId: string,
+  userId: number,
+  messageId: string,
+  busStopCode: string,
+) => {
+  await addNewFaveBusStopToConfig(ctx, userId, busStopCode);
   deleteItemFromCache(chatId, messageId);
 };

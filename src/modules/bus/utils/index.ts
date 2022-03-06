@@ -119,7 +119,9 @@ export const searchBusStops = async (str: string): Promise<BusStop[]> => {
   return busStops;
 };
 
+// userId is optional only if you need it to be encoded in callback data
 export const getBusStopMarkupList = (
+  busStopCallbackDataType: DataType,
   busStops: BusStop[],
   offset: number,
   messageId: string | number,
@@ -129,7 +131,7 @@ export const getBusStopMarkupList = (
     .map((info: BusStop) => [
       {
         text: `${info.RoadName}, ${info.Description} (${info.BusStopCode})`,
-        callback_data: encodeCallbackData(DataType.BUS_STOP_SEARCH, messageId, info.BusStopCode),
+        callback_data: encodeCallbackData(busStopCallbackDataType, messageId, info.BusStopCode),
       },
     ])
     .concat(
@@ -144,6 +146,7 @@ export const getBusStopMarkupList = (
                         DataType.BUS_STOP_SEARCH_PAGINATE,
                         messageId,
                         offset - BUS_STOP_SEARCH_PAGE_LIMIT,
+                        busStopCallbackDataType,
                       ),
                     },
                   ]
@@ -156,6 +159,7 @@ export const getBusStopMarkupList = (
                         DataType.BUS_STOP_SEARCH_PAGINATE,
                         messageId,
                         offset + BUS_STOP_SEARCH_PAGE_LIMIT,
+                        busStopCallbackDataType,
                       ),
                     },
                   ]

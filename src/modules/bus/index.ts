@@ -7,6 +7,7 @@ import {
   replyWithBusArrivalInfo,
   searchBusStops,
 } from './utils';
+import { DataType } from '../../types';
 
 bot.command('bus', (ctx) => {
   ctx.reply(
@@ -43,7 +44,7 @@ bot.hears(/\/checkbus (.+)/, async (ctx) => {
     setItemInCache(chatId, messageId, JSON.stringify(busStops), BUS_STOP_CACHE_DURATION_IN_SEC);
     ctx.reply('Are you looking for any of these bus stops?', {
       reply_markup: {
-        inline_keyboard: getBusStopMarkupList(busStops, 0, messageId),
+        inline_keyboard: getBusStopMarkupList(DataType.BUS_STOP_SEARCH, busStops, 0, messageId),
       },
     });
   } catch (err) {
@@ -74,6 +75,33 @@ bot.hears(/\/addfavebusstop (\d+)$/, async (ctx) => {
   const userId = ctx.message.from.id;
   const busStopCode = ctx.match[1].trim();
   await addNewFaveBusStopToConfig(ctx, userId, busStopCode);
+});
+
+bot.hears(/\/addfavebusstop (.+)/, async (ctx) => {
+  ctx.replyWithChatAction('typing');
+  const chatId = ctx.message.chat.id;
+  const userId = ctx.message.from.id;
+  const messageId = ctx.message.message_id;
+  const searchString = ctx.match[1].trim();
+  try {
+    const busStops = await searchBusStops(searchString);
+    if (busStops.length === 0) {
+      ctx.reply("Can't find the bus stop you are looking for! Try double checking your spelling!");
+      return;
+    }
+    setItemInCache(chatId, messageId, JSON.stringify(busStops), BUS_STOP_CACHE_DURATION_IN_SEC);
+    ctx.reply('Are you looking for any of these bus stops?', {
+      reply_markup: {
+        inline_keyboard: getBusStopMarkupList(DataType.ADD_FAVE_BUS_STOP, busStops, 0, messageId),
+      },
+    });
+  } catch (err) {
+    console.error(
+      `Failed to search bus stop and add fave bus stop for user ${userId} in chat ${chatId}. ` +
+        err.message,
+    );
+    ctx.reply('Family bot error! Sorry!');
+  }
 });
 
 bot.command('addfavebusstop', (ctx) => {

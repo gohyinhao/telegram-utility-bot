@@ -5,6 +5,7 @@ import { DataType } from '../../types';
 import { parseCallbackData } from '../../utils/index';
 import { handleAddFaveBobaDrinkCallbackQuery } from '../boba/callbackQuery';
 import {
+  handleAddFaveBusStopCbQuery,
   handleBusStopSearchCbQuery,
   handleBusStopSearchPaginateCbQuery,
 } from '../bus/callbackQuery';
@@ -39,10 +40,19 @@ bot.on('callback_query', async (ctx) => {
       await handleAddFaveFoodOrderCallbackQuery(ctx, chatId, userId, ...(args as [string, string]));
       break;
     case DataType.BUS_STOP_SEARCH_PAGINATE:
-      await handleBusStopSearchPaginateCbQuery(ctx, chatId, args[0] as string, Number(args[1]));
+      await handleBusStopSearchPaginateCbQuery(
+        ctx,
+        chatId,
+        args[0] as string,
+        Number(args[1]),
+        args[2] as DataType,
+      );
       break;
     case DataType.BUS_STOP_SEARCH:
       await handleBusStopSearchCbQuery(ctx, chatId, ...(args as [string, string]));
+      break;
+    case DataType.ADD_FAVE_BUS_STOP:
+      await handleAddFaveBusStopCbQuery(ctx, chatId, userId, ...(args as [string, string]));
       break;
   }
 
