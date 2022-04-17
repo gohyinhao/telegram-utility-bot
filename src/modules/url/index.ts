@@ -1,7 +1,8 @@
 import bot from '../../bot';
 import { MAX_NUM_OF_URL, MAX_URL_DESC_LENGTH, MAX_URL_LENGTH } from './constants';
 import UrlListModel from './models/urlListRecord';
-import { checkUrlExistInList } from './utils';
+import { UrlObject } from './types';
+import { checkUrlExistInList, formatUrlObjectForDisplay } from './utils';
 
 bot.command('url', (ctx) => {
   ctx.reply(
@@ -56,26 +57,26 @@ bot.command('addurl', (ctx) => {
   );
 });
 
-// bot.command('listurl', async (ctx) => {
-//   const chatId = ctx.message.chat.id;
-//   try {
-//     const urlList = await UrlListModel.findOne({ chatId }).exec();
-//     if (!urlList || urlList.items.length === 0) {
-//       ctx.reply('Add a URL to your list with /addurl command first!');
-//       return;
-//     }
+bot.command('listurl', async (ctx) => {
+  const chatId = ctx.message.chat.id;
+  try {
+    const urlList = await UrlListModel.findOne({ chatId }).exec();
+    if (!urlList || urlList.items.length === 0) {
+      ctx.reply('Add a URL to your list with /addurl command first!');
+      return;
+    }
+
+    let response = 'Current Stored URLs\n';
+    urlList.items.forEach((item: UrlObject, index: number) => {
+      response += `${index + 1}. ${formatUrlObjectForDisplay(item)}\n`;
+    });
+    ctx.reply(response);
+  } catch (err) {
+    console.error(`Failed to display URL list for chat ${chatId}. ` + err.message);
+    ctx.reply('Sorry! Family bot failed to retrieve your URL list!');
+  }
+});
 //
-//     let response = 'Current Grocery List\n';
-//     urlList.items.forEach((item: string, index: number) => {
-//       response += `${index + 1}. ${item}\n`;
-//     });
-//     ctx.reply(response);
-//   } catch (err) {
-//     console.error(`Failed to display grocery list for chat ${chatId}. ` + err.message);
-//     ctx.reply('Sorry! Family bot failed to retrieve your grocery list!');
-//   }
-// });
-// //
 // bot.command('cleargrocery', async (ctx) => {
 //   const chatId = ctx.message.chat.id;
 //   try {
