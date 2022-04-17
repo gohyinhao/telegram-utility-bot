@@ -22,9 +22,5 @@ bot.help((ctx) => {
 });
 
 bot.command('futurefeatures', (ctx) => {
-  ctx.reply(
-    'List of upcoming features planned!\n' +
-      '- Map function, maybe\n' +
-      '- MRT waiting time function, maybe\n',
-  );
+  ctx.reply('List of upcoming features planned!\n' + '- Poll function\n' + '- Rain gif\n');
 });
