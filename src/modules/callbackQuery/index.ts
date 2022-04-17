@@ -15,6 +15,7 @@ import {
   handleReminderTypeCallbackQuery,
   handleReminderFreqCallbackQuery,
 } from '../reminder/callbackQuery';
+import { handleDeleteUrlCbQuery, handleDeleteUrlPaginateCbQuery } from '../url/callbackQuery';
 
 bot.on('callback_query', async (ctx) => {
   // any typing used to override incorrect typing in callback_query type
@@ -53,6 +54,12 @@ bot.on('callback_query', async (ctx) => {
       break;
     case DataType.ADD_FAVE_BUS_STOP:
       await handleAddFaveBusStopCbQuery(ctx, chatId, userId, ...(args as [string, string]));
+      break;
+    case DataType.DELETE_URL_PAGINATE:
+      await handleDeleteUrlPaginateCbQuery(ctx, chatId, Number(args[0]));
+      break;
+    case DataType.DELETE_URL:
+      await handleDeleteUrlCbQuery(ctx, chatId, args[0]);
       break;
   }
 
