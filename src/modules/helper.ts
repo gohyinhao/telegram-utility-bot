@@ -17,6 +17,7 @@ bot.help((ctx) => {
       '6. Grocery-related help /grocery\n' +
       '7. Weather-related help /weather\n' +
       '8. Bus-related help /bus\n' +
+      '9. URL-related help /url\n' +
       '\nTo hear about upcoming features, /futurefeatures',
   );
 });

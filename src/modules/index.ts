@@ -7,4 +7,5 @@ import './grocery';
 import './helper';
 import './reminder';
 import './rubbish';
+import './url';
 import './weather';
