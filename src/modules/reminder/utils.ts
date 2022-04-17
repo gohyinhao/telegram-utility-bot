@@ -21,6 +21,12 @@ export const getNewTimestampAfterInterval = (
     case ReminderFrequency.DAY:
       time.add(1, 'day');
       break;
+    case ReminderFrequency.WEEK:
+      time.add(1, 'week');
+      break;
+    case ReminderFrequency.BIWEEKLY:
+      time.add(2, 'weeks');
+      break;
     case ReminderFrequency.MONTH:
       time.add(1, 'month');
       break;

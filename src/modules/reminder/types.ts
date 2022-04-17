@@ -7,6 +7,8 @@ export enum ReminderFrequency {
   MINUTE = 'min',
   HOUR = 'hour',
   DAY = 'day',
+  WEEK = 'week',
+  BIWEEKLY = 'biweekly',
   MONTH = 'month',
   QUARTER = 'quarter',
   BIANNUAL = 'biannual',
